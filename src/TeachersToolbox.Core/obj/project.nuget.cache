@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ATFAH5yiz/Y=",
+  "success": true,
+  "projectFilePath": "D:\\TeachersToolbox\\src\\TeachersToolbox.Core\\TeachersToolbox.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.24\\microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -1,0 +1,11 @@
+D:\TeachersToolbox\src\TeachersToolbox.Core\bin\Debug\net8.0\TeachersToolbox.Core.deps.json
+D:\TeachersToolbox\src\TeachersToolbox.Core\bin\Debug\net8.0\TeachersToolbox.Core.dll
+D:\TeachersToolbox\src\TeachersToolbox.Core\bin\Debug\net8.0\TeachersToolbox.Core.pdb
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.AssemblyInfoInputs.cache
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.AssemblyInfo.cs
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.csproj.CoreCompileInputs.cache
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.dll
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\refint\TeachersToolbox.Core.dll
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.pdb
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\ref\TeachersToolbox.Core.dll

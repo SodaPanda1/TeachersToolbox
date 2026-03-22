@@ -1,0 +1,15 @@
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.csproj.AssemblyReference.cache
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.GeneratedMSBuildEditorConfig.editorconfig
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.AssemblyInfoInputs.cache
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.AssemblyInfo.cs
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.csproj.CoreCompileInputs.cache
+D:\TeachersToolbox\src\TeachersToolbox.Data\bin\Debug\net8.0\TeachersToolbox.Data.deps.json
+D:\TeachersToolbox\src\TeachersToolbox.Data\bin\Debug\net8.0\TeachersToolbox.Data.dll
+D:\TeachersToolbox\src\TeachersToolbox.Data\bin\Debug\net8.0\TeachersToolbox.Data.pdb
+D:\TeachersToolbox\src\TeachersToolbox.Data\bin\Debug\net8.0\TeachersToolbox.Core.dll
+D:\TeachersToolbox\src\TeachersToolbox.Data\bin\Debug\net8.0\TeachersToolbox.Core.pdb
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\Teachers.069D0EF3.Up2Date
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.dll
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\refint\TeachersToolbox.Data.dll
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\TeachersToolbox.Data.pdb
+D:\TeachersToolbox\src\TeachersToolbox.Data\obj\Debug\net8.0\ref\TeachersToolbox.Data.dll
