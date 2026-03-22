@@ -18,10 +18,11 @@
 
         <!-- App Options -->
         <UseRidGraph>true</UseRidGraph>
-        <Platforms>x86;x64;ARM64</Platforms>
-        <ApplicationManifest>app.manifest</ApplicationManifest>
-        <PublishProfile>win-$(Platform).pubxml</PublishProfile>
-        <RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+        
+        <!-- Self-contained deployment -->
+        <SelfContained>true</SelfContained>
+        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,32 +36,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="TeachersToolbox.App.slnx" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\TeachersToolbox.Core\TeachersToolbox.Core.csproj" />
         <ProjectReference Include="..\TeachersToolbox.Data\TeachersToolbox.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.241107002" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250108002" />
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
         <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-        <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.0.0-rc6" />
         <PackageReference Include="ClosedXML" Version="0.102.3" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-        <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
-
-        <Manifest Include="$(ApplicationManifest)" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
         <ProjectCapability Include="Msix"/>
     </ItemGroup>
-
-    <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-        <HasPackageAndPublishMenu>true</HasPackageAndPublishMenu>
-    </PropertyGroup>
 </Project>

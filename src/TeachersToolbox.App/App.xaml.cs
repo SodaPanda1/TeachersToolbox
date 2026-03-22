@@ -22,9 +22,9 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
 
-        // 数据库
-        var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-        var dbPath = System.IO.Path.Combine(localFolder, "teachers_toolbox.db");
+        // 数据库 - 使用应用程序目录
+        var appFolder = AppDomain.CurrentDomain.BaseDirectory;
+        var dbPath = System.IO.Path.Combine(appFolder, "teachers_toolbox.db");
         services.AddSingleton(new DbContext(dbPath));
 
         // 仓储
