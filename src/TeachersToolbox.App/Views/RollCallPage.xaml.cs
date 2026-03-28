@@ -25,22 +25,17 @@ public sealed partial class RollCallPage : Page
 
     private void LoadStudents()
     {
-        _students = new List<Student>
-        {
-            new Student { Id = 1, Name = "张三", SeatNumber = 1 },
-            new Student { Id = 2, Name = "李四", SeatNumber = 2 },
-            new Student { Id = 3, Name = "王五", SeatNumber = 3 },
-            new Student { Id = 4, Name = "赵六", SeatNumber = 4 },
-            new Student { Id = 5, Name = "孙七", SeatNumber = 5 },
-        };
-        ClassInfoText.Text = $"已加载 {_students.Count} 名学生";
+        // TODO: 从数据库加载学生
+        // 移除示例数据，显示空列表提示
+        _students.Clear();
+        ClassInfoText.Text = "请先在学生管理中导入学生名单";
     }
 
     private void StartButton_Click(object sender, RoutedEventArgs e)
     {
         if (_students.Count == 0)
         {
-            StudentNameText.Text = "请先选择班级";
+            StudentNameText.Text = "暂无学生数据";
             return;
         }
 

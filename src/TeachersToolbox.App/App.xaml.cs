@@ -12,6 +12,8 @@ public partial class App : Application
     private Window? _window;
     private ServiceProvider? _serviceProvider;
 
+    public static MainWindow? MainWindow { get; private set; }
+
     public App()
     {
         this.InitializeComponent();
@@ -57,7 +59,7 @@ public partial class App : Application
             System.Diagnostics.Debug.WriteLine($"Database initialization error: {ex.Message}");
         }
 
-        _window = new MainWindow();
-        _window.Activate();
+        MainWindow = new MainWindow();
+        MainWindow.Activate();
     }
 }
