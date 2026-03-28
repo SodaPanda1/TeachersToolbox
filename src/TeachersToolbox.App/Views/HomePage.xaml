@@ -6,36 +6,104 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid Padding="24">
-        <StackPanel Spacing="16">
-            <TextBlock FontSize="32" FontWeight="Bold" Text="教师工具箱" />
-            <TextBlock FontSize="16" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+
+    <Grid Style="{StaticResource PageContainerStyle}">
+        <StackPanel Spacing="{StaticResource SpacingMedium}">
+            <TextBlock Style="{StaticResource PageTitleStyle}" Text="教师工具箱" />
+            <TextBlock FontSize="{StaticResource AppFontSizeLarge}" 
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                        Text="欢迎使用教师工具箱 - 您的一站式教学助手" />
-            
+
             <TextBlock FontSize="20" FontWeight="SemiBold" Margin="0,24,0,0" Text="快捷入口" />
-            <StackPanel Orientation="Horizontal" Spacing="12">
-                <Border Width="180" Height="100" Padding="16" 
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8">
-                    <StackPanel>
-                        <FontIcon FontSize="24" Glyph="&#xE8EC;" />
-                        <TextBlock Margin="0,8,0,0" Text="随机点名" />
+            
+            <StackPanel Orientation="Horizontal" Spacing="{StaticResource SpacingMedium}">
+                <Border Style="{StaticResource QuickActionCardStyle}" 
+                        PointerEntered="Card_PointerEntered" 
+                        PointerExited="Card_PointerExited"
+                        Tag="rollcall">
+                    <StackPanel VerticalAlignment="Center">
+                        <FontIcon FontSize="32" Glyph="&#xE8EC;" />
+                        <TextBlock Margin="0,12,0,0" FontSize="{StaticResource AppFontSize}" Text="随机点名" />
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}" 
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="课堂随机抽取学生" />
                     </StackPanel>
                 </Border>
-                <Border Width="180" Height="100" Padding="16"
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8">
-                    <StackPanel>
-                        <FontIcon FontSize="24" Glyph="&#xE734;" />
-                        <TextBlock Margin="0,8,0,0" Text="成绩录入" />
+
+                <Border Style="{StaticResource QuickActionCardStyle}"
+                        PointerEntered="Card_PointerEntered"
+                        PointerExited="Card_PointerExited"
+                        Tag="scores">
+                    <StackPanel VerticalAlignment="Center">
+                        <FontIcon FontSize="32" Glyph="&#xE734;" />
+                        <TextBlock Margin="0,12,0,0" FontSize="{StaticResource AppFontSize}" Text="成绩录入" />
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="快速录入学生成绩" />
                     </StackPanel>
                 </Border>
-                <Border Width="180" Height="100" Padding="16"
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8">
-                    <StackPanel>
-                        <FontIcon FontSize="24" Glyph="&#xE916;" />
-                        <TextBlock Margin="0,8,0,0" Text="课堂计时" />
+
+                <Border Style="{StaticResource QuickActionCardStyle}"
+                        PointerEntered="Card_PointerEntered"
+                        PointerExited="Card_PointerExited"
+                        Tag="timer">
+                    <StackPanel VerticalAlignment="Center">
+                        <FontIcon FontSize="32" Glyph="&#xE916;" />
+                        <TextBlock Margin="0,12,0,0" FontSize="{StaticResource AppFontSize}" Text="课堂计时" />
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="倒计时/正计时工具" />
                     </StackPanel>
                 </Border>
             </StackPanel>
+
+            <!-- 统计概览 -->
+            <TextBlock FontSize="20" FontWeight="SemiBold" Margin="0,32,0,16" Text="今日概览" />
+            
+            <Grid ColumnSpacing="{StaticResource SpacingMedium}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource StatCardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}" 
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
+                                   Text="班级总数" />
+                        <TextBlock FontSize="32" FontWeight="Bold" Text="3" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource StatCardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="学生总数" />
+                        <TextBlock FontSize="32" FontWeight="Bold" Text="120" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource StatCardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="待批作业" />
+                        <TextBlock FontSize="32" FontWeight="Bold" Text="5" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="3" Style="{StaticResource StatCardStyle}">
+                    <StackPanel>
+                        <TextBlock FontSize="{StaticResource AppFontSizeSmall}"
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                   Text="今日课程" />
+                        <TextBlock FontSize="32" FontWeight="Bold" Text="4" />
+                    </StackPanel>
+                </Border>
+            </Grid>
         </StackPanel>
     </Grid>
 </Page>
