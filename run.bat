@@ -7,7 +7,7 @@ echo.
 echo 正在启动教师工具箱...
 echo.
 
-start "" "src\TeachersToolbox.App\bin\Debug\net8.0-windows10.0.19041.0\win-x64\TeachersToolbox.App.exe"
+start "" "src\TeachersToolbox.App\bin\x86\Debug\net8.0-windows10.0.19041.0\TeachersToolbox.App.exe"
 
 if %ERRORLEVEL% EQU 0 (
     echo 应用程序已启动!
@@ -15,8 +15,7 @@ if %ERRORLEVEL% EQU 0 (
     echo 启动失败，请检查错误信息。
     echo.
     echo 如果提示 "Windows App Runtime" 相关错误，请确保安装了
-    echo Microsoft Windows App SDK 1.6 运行时:
-    echo https://aka.ms/windowsappsdk/1.6/latest/windowsappruntimeinstall-x64.exe
+    echo Microsoft Windows App SDK 运行时。
 )
 
 pause

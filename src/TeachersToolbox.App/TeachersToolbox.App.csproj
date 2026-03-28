@@ -15,14 +15,6 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>TeachersToolbox.App</RootNamespace>
-
-        <!-- App Options -->
-        <UseRidGraph>true</UseRidGraph>
-        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-        
-        <!-- Self-contained deployment -->
-        <SelfContained>true</SelfContained>
-        <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     </PropertyGroup>
 
     <ItemGroup>

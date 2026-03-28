@@ -9,3 +9,4 @@ D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Cor
 D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\refint\TeachersToolbox.Core.dll
 D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.pdb
 D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\ref\TeachersToolbox.Core.dll
+D:\TeachersToolbox\src\TeachersToolbox.Core\obj\Debug\net8.0\TeachersToolbox.Core.sourcelink.json

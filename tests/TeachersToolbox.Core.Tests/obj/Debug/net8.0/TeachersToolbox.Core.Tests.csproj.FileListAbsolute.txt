@@ -100,3 +100,4 @@ D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\refint\Teac
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.pdb
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.genruntimeconfig.cache
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\ref\TeachersToolbox.Core.Tests.dll
+D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.sourcelink.json

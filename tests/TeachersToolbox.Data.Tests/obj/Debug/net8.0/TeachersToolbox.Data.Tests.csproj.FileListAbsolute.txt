@@ -127,3 +127,4 @@ D:\TeachersToolbox\tests\TeachersToolbox.Data.Tests\obj\Debug\net8.0\refint\Teac
 D:\TeachersToolbox\tests\TeachersToolbox.Data.Tests\obj\Debug\net8.0\TeachersToolbox.Data.Tests.pdb
 D:\TeachersToolbox\tests\TeachersToolbox.Data.Tests\obj\Debug\net8.0\TeachersToolbox.Data.Tests.genruntimeconfig.cache
 D:\TeachersToolbox\tests\TeachersToolbox.Data.Tests\obj\Debug\net8.0\ref\TeachersToolbox.Data.Tests.dll
+D:\TeachersToolbox\tests\TeachersToolbox.Data.Tests\obj\Debug\net8.0\TeachersToolbox.Data.Tests.sourcelink.json
