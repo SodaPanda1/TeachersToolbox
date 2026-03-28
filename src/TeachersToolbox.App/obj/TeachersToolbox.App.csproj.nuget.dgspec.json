@@ -72,15 +72,15 @@
             },
             "Microsoft.Web.WebView2": {
               "target": "Package",
-              "version": "[1.0.2903.40, )"
+              "version": "[1.0.3179.45, )"
             },
             "Microsoft.Windows.SDK.BuildTools": {
               "target": "Package",
-              "version": "[10.0.26100.1742, )"
+              "version": "[10.0.26100.4654, )"
             },
             "Microsoft.WindowsAppSDK": {
               "target": "Package",
-              "version": "[1.6.250108002, )"
+              "version": "[1.8.260317003, )"
             }
           },
           "imports": [

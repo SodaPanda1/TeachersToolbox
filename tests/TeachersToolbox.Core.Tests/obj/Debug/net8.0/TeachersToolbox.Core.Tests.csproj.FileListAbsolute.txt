@@ -94,10 +94,10 @@ D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToo
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.AssemblyInfoInputs.cache
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.AssemblyInfo.cs
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.csproj.CoreCompileInputs.cache
+D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.sourcelink.json
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\Teachers.950FB195.Up2Date
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.dll
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\refint\TeachersToolbox.Core.Tests.dll
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.pdb
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.genruntimeconfig.cache
 D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\ref\TeachersToolbox.Core.Tests.dll
-D:\TeachersToolbox\tests\TeachersToolbox.Core.Tests\obj\Debug\net8.0\TeachersToolbox.Core.Tests.sourcelink.json

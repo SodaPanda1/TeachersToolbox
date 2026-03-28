@@ -9,8 +9,8 @@
 
         <!-- WinUI 3 -->
         <UseWinUI>true</UseWinUI>
-        <EnableMsixTooling>true</EnableMsixTooling>
         <WindowsPackageType>None</WindowsPackageType>
+        <PublishReadyToRun>false</PublishReadyToRun>
 
         <!-- Project Options -->
         <Nullable>enable</Nullable>
@@ -20,6 +20,9 @@
         
         <!-- High DPI Support -->
         <HighDpiMode>PerMonitorV2</HighDpiMode>
+        
+        <!-- Roll forward for .NET 10 SDK compatibility -->
+        <RollForward>Major</RollForward>
     </PropertyGroup>
 
     <ItemGroup>
@@ -38,15 +41,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250108002" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260317003" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
         <PackageReference Include="ClosedXML" Version="0.102.3" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(DisableMsixProjectCapabilityAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">
-        <ProjectCapability Include="Msix"/>
-    </ItemGroup>
 </Project>

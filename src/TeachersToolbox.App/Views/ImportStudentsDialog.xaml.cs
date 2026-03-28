@@ -19,7 +19,12 @@ public sealed partial class ImportStudentsDialog : ContentDialog
     public ImportStudentsDialog()
     {
         this.InitializeComponent();
-        ColumnComboBox.SelectedIndex = 1;
+        
+        // 在 Loaded 事件中设置默认选中项，避免触发事件时控件未初始化
+        this.Loaded += (s, e) =>
+        {
+            ColumnComboBox.SelectedIndex = 1;
+        };
         
         // 使用 Closing 事件而不是按钮点击事件
         this.PrimaryButtonClick += OnPrimaryButtonClick;
@@ -52,7 +57,8 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
+            if (PreviewInfoText != null)
+                PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
         }
     }
 
@@ -70,7 +76,8 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
+            if (PreviewInfoText != null)
+                PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
         }
     }
 
@@ -111,11 +118,13 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             _previewData = _excelService.GetPreviewData(_selectedFilePath, worksheetName);
             RenderPreview();
             UpdateStudentCount();
-            PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
+            if (PreviewInfoText != null)
+                PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
         }
         catch (Exception ex)
         {
-            PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
+            if (PreviewInfoText != null)
+                PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
         }
     }
 
@@ -214,6 +223,8 @@ public sealed partial class ImportStudentsDialog : ContentDialog
 
     private void UpdateStudentCount()
     {
+        if (StudentCountText == null) return;
+        
         if (_selectedFilePath == null || WorksheetComboBox.SelectedItem == null)
         {
             StudentCountText.Text = "";
@@ -248,13 +259,15 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             if (ImportedStudentNames.Count == 0)
             {
                 args.Cancel = true;
-                PreviewInfoText.Text = "未找到有效的学生姓名";
+                if (PreviewInfoText != null)
+                    PreviewInfoText.Text = "未找到有效的学生姓名";
             }
         }
         catch (Exception ex)
         {
             args.Cancel = true;
-            PreviewInfoText.Text = $"导入失败: {ex.Message}";
+            if (PreviewInfoText != null)
+                PreviewInfoText.Text = $"导入失败: {ex.Message}";
         }
     }
 
