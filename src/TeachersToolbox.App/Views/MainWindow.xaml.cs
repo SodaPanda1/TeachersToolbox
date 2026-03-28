@@ -1,60 +1,53 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Windowing;
 
 namespace TeachersToolbox.App.Views;
 
 public sealed partial class MainWindow : Window
 {
+    private const int DefaultWidth = 1280;
+    private const int DefaultHeight = 800;
+    private const int MinWidth = 800;
+    private const int MinHeight = 600;
+
     public MainWindow()
     {
         this.InitializeComponent();
         this.ExtendsContentIntoTitleBar = true;
         this.Title = "教师工具箱";
 
-        // 获取显示器信息并设置适当的窗口大小
         InitializeWindowSize();
     }
 
     private void InitializeWindowSize()
     {
         var appWindow = this.AppWindow;
-        if (appWindow != null)
+        if (appWindow == null) return;
+
+        var displayArea = DisplayArea.GetFromWindowId(appWindow.Id, DisplayAreaFallback.Primary);
+        if (displayArea == null)
         {
-            // 获取显示区域
-            var displayArea = DisplayArea.GetFromWindowId(
-                appWindow.Id,
-                DisplayAreaFallback.Primary);
-
-            if (displayArea != null)
-            {
-                // 计算合适的窗口大小（屏幕的80%或最大1280x800）
-                var screenWidth = displayArea.WorkArea.Width;
-                var screenHeight = displayArea.WorkArea.Height;
-
-                // 计算目标大小，考虑DPI缩放
-                var targetWidth = Math.Min(1280, (int)(screenWidth * 0.8));
-                var targetHeight = Math.Min(800, (int)(screenHeight * 0.8));
-
-                // 确保最小窗口大小
-                targetWidth = Math.Max(targetWidth, 800);
-                targetHeight = Math.Max(targetHeight, 600);
-
-                // 设置窗口大小
-                appWindow.Resize(new Windows.Graphics.SizeInt32(targetWidth, targetHeight));
-
-                // 将窗口居中
-                var centerX = (screenWidth - targetWidth) / 2 + displayArea.WorkArea.X;
-                var centerY = (screenHeight - targetHeight) / 2 + displayArea.WorkArea.Y;
-                appWindow.Move(new Windows.Graphics.PointInt32(centerX, centerY));
-            }
-            else
-            {
-                // 回退到默认大小
-                appWindow.Resize(new Windows.Graphics.SizeInt32(1280, 800));
-            }
+            appWindow.Resize(new Windows.Graphics.SizeInt32(DefaultWidth, DefaultHeight));
+            return;
         }
+
+        var workArea = displayArea.WorkArea;
+        
+        // 计算窗口大小 - 使用屏幕的70%，但不超过默认值
+        var targetWidth = Math.Min(DefaultWidth, (int)(workArea.Width * 0.7));
+        var targetHeight = Math.Min(DefaultHeight, (int)(workArea.Height * 0.7));
+
+        // 确保不小于最小尺寸
+        targetWidth = Math.Max(targetWidth, MinWidth);
+        targetHeight = Math.Max(targetHeight, MinHeight);
+
+        appWindow.Resize(new Windows.Graphics.SizeInt32(targetWidth, targetHeight));
+
+        // 居中窗口
+        var centerX = (workArea.Width - targetWidth) / 2 + workArea.X;
+        var centerY = (workArea.Height - targetHeight) / 2 + workArea.Y;
+        appWindow.Move(new Windows.Graphics.PointInt32(centerX, centerY));
     }
 
     private void NavView_Loaded(object sender, RoutedEventArgs e)

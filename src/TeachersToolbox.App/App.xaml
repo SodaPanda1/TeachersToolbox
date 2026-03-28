@@ -11,7 +11,6 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <ResourceDictionary Source="Styles/ResponsiveStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- 主色调 -->
@@ -20,27 +19,10 @@
             <SolidColorBrush x:Key="WhiteBrush" Color="White" />
             <SolidColorBrush x:Key="BlackBrush" Color="Black" />
 
-            <!-- 基础字体大小 -->
-            <x:Double x:Key="AppFontSize">14</x:Double>
-            <x:Double x:Key="AppFontSizeSmall">12</x:Double>
-            <x:Double x:Key="AppFontSizeLarge">16</x:Double>
-
-            <!-- 标签样式 -->
-            <Style x:Key="MyLabel" TargetType="TextBlock">
-                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}" />
-            </Style>
-
             <!-- 按钮样式 -->
             <Style x:Key="Action" TargetType="Button">
-                <Setter Property="FontSize" Value="{StaticResource AppFontSize}" />
+                <Setter Property="FontSize" Value="14" />
                 <Setter Property="Padding" Value="14,10" />
-            </Style>
-
-            <!-- 主要按钮样式 -->
-            <Style x:Key="PrimaryAction" TargetType="Button" BasedOn="{StaticResource Action}">
-                <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
-                <Setter Property="CornerRadius" Value="8" />
-                <Setter Property="Foreground" Value="{StaticResource WhiteBrush}" />
             </Style>
 
             <!-- 强调按钮样式 -->

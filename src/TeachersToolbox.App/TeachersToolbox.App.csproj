@@ -15,6 +15,9 @@
         <LangVersion>latest</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>TeachersToolbox.App</RootNamespace>
+        
+        <!-- High DPI Support -->
+        <HighDpiMode>PerMonitorV2</HighDpiMode>
     </PropertyGroup>
 
     <ItemGroup>

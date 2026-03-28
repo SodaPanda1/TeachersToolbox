@@ -93,7 +93,7 @@
               "version": "[8.0.25, 8.0.25]"
             },
             {
-              "name": "Microsoft.NETCore.App.Host.win-x86",
+              "name": "Microsoft.NETCore.App.Host.win-x64",
               "version": "[8.0.25, 8.0.25]"
             },
             {
