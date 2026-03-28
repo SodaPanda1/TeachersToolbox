@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Windowing;
 
 namespace TeachersToolbox.App.Views;
@@ -18,6 +19,9 @@ public sealed partial class MainWindow : Window
         this.Title = "教师工具箱";
 
         InitializeWindowSize();
+
+        // 监听导航事件以更新返回按钮状态
+        ContentFrame.Navigated += ContentFrame_Navigated;
     }
 
     private void InitializeWindowSize()
@@ -54,6 +58,27 @@ public sealed partial class MainWindow : Window
     {
         ContentFrame.Navigate(typeof(HomePage));
         NavView.SelectedItem = NavView.MenuItems[0];
+        UpdateBackButtonState();
+    }
+
+    private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+    {
+        UpdateBackButtonState();
+    }
+
+    private void UpdateBackButtonState()
+    {
+        // 更新返回按钮是否可用
+        NavView.IsBackEnabled = ContentFrame.CanGoBack;
+    }
+
+    private void NavView_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+    {
+        // 处理返回请求
+        if (ContentFrame.CanGoBack)
+        {
+            ContentFrame.GoBack();
+        }
     }
 
     private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)

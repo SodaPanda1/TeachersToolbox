@@ -8,9 +8,14 @@
     Title="教师工具箱"
     mc:Ignorable="d">
     <Grid>
-        <NavigationView x:Name="NavView" IsBackButtonVisible="Auto" IsSettingsVisible="True"
-                        ItemInvoked="NavView_ItemInvoked" Loaded="NavView_Loaded"
-                        PaneDisplayMode="Auto" IsPaneOpen="True">
+        <NavigationView x:Name="NavView" 
+                        IsBackButtonVisible="Auto" 
+                        IsSettingsVisible="True"
+                        ItemInvoked="NavView_ItemInvoked" 
+                        BackRequested="NavView_BackRequested"
+                        Loaded="NavView_Loaded"
+                        PaneDisplayMode="Auto" 
+                        IsPaneOpen="True">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="主页" Icon="Home" Tag="home" />
                 
