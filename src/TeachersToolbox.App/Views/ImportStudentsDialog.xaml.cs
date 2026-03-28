@@ -23,6 +23,10 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         // 在 Loaded 事件中设置默认选中项，避免触发事件时控件未初始化
         this.Loaded += (s, e) =>
         {
+            var dialogWidth = this.ActualWidth;
+            var dialogHeight = this.ActualHeight;
+            System.Diagnostics.Debug.WriteLine($"Dialog Size: {dialogWidth} x {dialogHeight}");
+
             ColumnComboBox.SelectedIndex = 1;
         };
         

@@ -11,107 +11,105 @@
     DefaultButton="Primary"
     mc:Ignorable="d">
 
-    <Border Width="600" Padding="0,8,0,0">
-        <Grid RowSpacing="16">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+    <Grid Width="550" RowSpacing="16" Padding="0,8,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-            <!-- 文件选择 -->
-            <StackPanel Grid.Row="0" Spacing="8">
-                <TextBlock Text="选择Excel文件" FontWeight="SemiBold" />
-                <Grid ColumnSpacing="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="FilePathBox" 
-                             IsReadOnly="True" 
-                             PlaceholderText="点击右侧按钮选择文件..." />
-                    <Button x:Name="BrowseButton" 
-                            Grid.Column="1"
-                            Click="BrowseButton_Click"
-                            Content="浏览..."
-                            Padding="16,8" />
-                </Grid>
-            </StackPanel>
-
-            <!-- 工作表和列选择 -->
-            <Grid Grid.Row="1" ColumnSpacing="16">
+        <!-- 文件选择 -->
+        <StackPanel Grid.Row="0" Spacing="8">
+            <TextBlock Text="选择Excel文件" FontWeight="SemiBold" />
+            <Grid ColumnSpacing="8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-
-                <StackPanel Grid.Column="0" Spacing="8">
-                    <TextBlock Text="工作表" FontWeight="SemiBold" />
-                    <ComboBox x:Name="WorksheetComboBox" 
-                              PlaceholderText="选择工作表"
-                              SelectionChanged="WorksheetComboBox_SelectionChanged" />
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Spacing="8">
-                    <TextBlock Text="姓名所在列" FontWeight="SemiBold" />
-                    <ComboBox x:Name="ColumnComboBox" Width="100"
-                              PlaceholderText="选择列"
-                              SelectionChanged="ColumnComboBox_SelectionChanged">
-                        <ComboBoxItem Content="A" />
-                        <ComboBoxItem Content="B" />
-                        <ComboBoxItem Content="C" />
-                        <ComboBoxItem Content="D" />
-                        <ComboBoxItem Content="E" />
-                        <ComboBoxItem Content="F" />
-                        <ComboBoxItem Content="G" />
-                        <ComboBoxItem Content="H" />
-                        <ComboBoxItem Content="I" />
-                        <ComboBoxItem Content="J" />
-                    </ComboBox>
-                </StackPanel>
-
-                <CheckBox Grid.Column="2" 
-                          x:Name="SkipHeaderCheckBox" 
-                          Content="第一行是标题"
-                          VerticalAlignment="Bottom"
-                          IsChecked="True" 
-                          Checked="SkipHeaderCheckBox_Changed" 
-                          Unchecked="SkipHeaderCheckBox_Changed" />
+                <TextBox x:Name="FilePathBox" 
+                         IsReadOnly="True" 
+                         PlaceholderText="点击右侧按钮选择文件..." />
+                <Button x:Name="BrowseButton" 
+                        Grid.Column="1"
+                        Click="BrowseButton_Click"
+                        Content="浏览..."
+                        Padding="16,8" />
             </Grid>
+        </StackPanel>
 
-            <!-- Excel 预览 -->
-            <Border Grid.Row="2" 
-                    BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" 
-                    BorderThickness="1" 
-                    CornerRadius="4"
-                    Padding="4">
-                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                    <Grid x:Name="PreviewGrid">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
+        <!-- 工作表和列选择 -->
+        <Grid Grid.Row="1" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-                        <!-- 列头 -->
-                        <Grid x:Name="HeaderGrid" Grid.Row="0" />
-
-                        <!-- 数据行 -->
-                        <Grid x:Name="DataGrid" Grid.Row="1" />
-                    </Grid>
-                </ScrollViewer>
-            </Border>
-
-            <!-- 导入信息 -->
-            <StackPanel Grid.Row="3" Spacing="4">
-                <TextBlock x:Name="PreviewInfoText" 
-                           Text="请选择Excel文件开始导入"
-                           Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                <TextBlock x:Name="StudentCountText" 
-                           Text=""
-                           FontWeight="SemiBold" />
+            <StackPanel Grid.Column="0" Spacing="8">
+                <TextBlock Text="工作表" FontWeight="SemiBold" />
+                <ComboBox x:Name="WorksheetComboBox" 
+                          PlaceholderText="选择工作表"
+                          SelectionChanged="WorksheetComboBox_SelectionChanged" />
             </StackPanel>
+
+            <StackPanel Grid.Column="1" Spacing="8">
+                <TextBlock Text="姓名所在列" FontWeight="SemiBold" />
+                <ComboBox x:Name="ColumnComboBox" Width="100"
+                          PlaceholderText="选择列"
+                          SelectionChanged="ColumnComboBox_SelectionChanged">
+                    <ComboBoxItem Content="A" />
+                    <ComboBoxItem Content="B" />
+                    <ComboBoxItem Content="C" />
+                    <ComboBoxItem Content="D" />
+                    <ComboBoxItem Content="E" />
+                    <ComboBoxItem Content="F" />
+                    <ComboBoxItem Content="G" />
+                    <ComboBoxItem Content="H" />
+                    <ComboBoxItem Content="I" />
+                    <ComboBoxItem Content="J" />
+                </ComboBox>
+            </StackPanel>
+
+            <CheckBox Grid.Column="2" 
+                      x:Name="SkipHeaderCheckBox" 
+                      Content="第一行是标题"
+                      VerticalAlignment="Bottom"
+                      IsChecked="True" 
+                      Checked="SkipHeaderCheckBox_Changed" 
+                      Unchecked="SkipHeaderCheckBox_Changed" />
         </Grid>
-    </Border>
+
+        <!-- Excel 预览 -->
+        <Border Grid.Row="2" 
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" 
+                BorderThickness="1" 
+                CornerRadius="4"
+                Padding="4">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <Grid x:Name="PreviewGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <!-- 列头 -->
+                    <Grid x:Name="HeaderGrid" Grid.Row="0" />
+
+                    <!-- 数据行 -->
+                    <Grid x:Name="DataGrid" Grid.Row="1" />
+                </Grid>
+            </ScrollViewer>
+        </Border>
+
+        <!-- 导入信息 -->
+        <StackPanel Grid.Row="3" Spacing="4">
+            <TextBlock x:Name="PreviewInfoText" 
+                       Text="请选择Excel文件开始导入"
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+            <TextBlock x:Name="StudentCountText" 
+                       Text=""
+                       FontWeight="SemiBold" />
+        </StackPanel>
+    </Grid>
 </ContentDialog>
