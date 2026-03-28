@@ -21,54 +21,77 @@
             <StackPanel Spacing="12">
                 <TextBlock FontSize="18" FontWeight="SemiBold" Text="快捷入口" />
                 <StackPanel Orientation="Horizontal" Spacing="12">
-                    <Border Width="200" Height="100" Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
-                            CornerRadius="8"
-                            PointerEntered="Card_PointerEntered"
-                            PointerExited="Card_PointerExited">
-                        <StackPanel VerticalAlignment="Center">
-                            <FontIcon FontSize="28" Glyph="&#xE8EC;" />
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Text="随机点名" />
-                            <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Text="课堂随机抽取学生" />
-                        </StackPanel>
-                    </Border>
-                    <Border Width="200" Height="100" Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8"
-                            PointerEntered="Card_PointerEntered"
-                            PointerExited="Card_PointerExited">
-                        <StackPanel VerticalAlignment="Center">
-                            <FontIcon FontSize="28" Glyph="&#xE734;" />
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Text="成绩录入" />
-                            <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Text="快速录入学生成绩" />
-                        </StackPanel>
-                    </Border>
-                    <Border Width="200" Height="100" Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8"
-                            PointerEntered="Card_PointerEntered"
-                            PointerExited="Card_PointerExited">
-                        <StackPanel VerticalAlignment="Center">
-                            <FontIcon FontSize="28" Glyph="&#xE916;" />
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Text="课堂计时" />
-                            <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Text="倒计时/正计时工具" />
-                        </StackPanel>
-                    </Border>
-                    <Border Width="200" Height="100" Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8"
-                            PointerEntered="Card_PointerEntered"
-                            PointerExited="Card_PointerExited">
-                        <StackPanel VerticalAlignment="Center">
-                            <FontIcon FontSize="28" Glyph="&#xE710;" />
-                            <TextBlock Margin="0,8,0,0" FontSize="14" Text="学生管理" />
-                            <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Text="管理学生档案信息" />
-                        </StackPanel>
-                    </Border>
+                    <!-- 随机点名 -->
+                    <Button Click="QuickAction_Click" Tag="rollcall" 
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                            Padding="0" Background="Transparent" BorderThickness="0">
+                        <Border Width="200" Height="100" Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                CornerRadius="8"
+                                PointerEntered="Card_PointerEntered"
+                                PointerExited="Card_PointerExited">
+                            <StackPanel VerticalAlignment="Center">
+                                <FontIcon FontSize="28" Glyph="&#xE8EC;" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="随机点名" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           Text="课堂随机抽取学生" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
+                    <!-- 成绩录入 -->
+                    <Button Click="QuickAction_Click" Tag="scores"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                            Padding="0" Background="Transparent" BorderThickness="0">
+                        <Border Width="200" Height="100" Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                CornerRadius="8"
+                                PointerEntered="Card_PointerEntered"
+                                PointerExited="Card_PointerExited">
+                            <StackPanel VerticalAlignment="Center">
+                                <FontIcon FontSize="28" Glyph="&#xE734;" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="成绩录入" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           Text="快速录入学生成绩" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
+                    <!-- 课堂计时 -->
+                    <Button Click="QuickAction_Click" Tag="timer"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                            Padding="0" Background="Transparent" BorderThickness="0">
+                        <Border Width="200" Height="100" Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                CornerRadius="8"
+                                PointerEntered="Card_PointerEntered"
+                                PointerExited="Card_PointerExited">
+                            <StackPanel VerticalAlignment="Center">
+                                <FontIcon FontSize="28" Glyph="&#xE916;" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="课堂计时" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           Text="倒计时/正计时工具" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
+                    <!-- 学生管理 -->
+                    <Button Click="QuickAction_Click" Tag="students"
+                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                            Padding="0" Background="Transparent" BorderThickness="0">
+                        <Border Width="200" Height="100" Padding="16"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                CornerRadius="8"
+                                PointerEntered="Card_PointerEntered"
+                                PointerExited="Card_PointerExited">
+                            <StackPanel VerticalAlignment="Center">
+                                <FontIcon FontSize="28" Glyph="&#xE710;" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="学生管理" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           Text="管理学生档案信息" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
                 </StackPanel>
             </StackPanel>
 

@@ -1,7 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media;
 
 namespace TeachersToolbox.App.Views;
 
@@ -10,6 +9,34 @@ public sealed partial class HomePage : Page
     public HomePage()
     {
         this.InitializeComponent();
+    }
+
+    private void QuickAction_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is string tag)
+        {
+            NavigateToPage(tag);
+        }
+    }
+
+    private void NavigateToPage(string tag)
+    {
+        var targetPage = tag switch
+        {
+            "rollcall" => typeof(RollCallPage),
+            "scores" => typeof(ScoresPage),
+            "timer" => typeof(TimerPage),
+            "students" => typeof(StudentsPage),
+            "classroom" => typeof(ClassroomPage),
+            "assignments" => typeof(AssignmentsPage),
+            "admin" => typeof(AdminPage),
+            _ => null
+        };
+
+        if (targetPage != null && Frame != null)
+        {
+            Frame.Navigate(targetPage);
+        }
     }
 
     private void Card_PointerEntered(object sender, PointerRoutedEventArgs e)
