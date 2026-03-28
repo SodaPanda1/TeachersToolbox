@@ -9,16 +9,7 @@
     PrimaryButtonText="确认导入"
     SecondaryButtonText="取消"
     DefaultButton="Primary"
-    PrimaryButtonClick="ImportButton_Click"
-    SecondaryButtonClick="CancelButton_Click"
     mc:Ignorable="d">
-
-    <ContentDialog.Resources>
-        <Style x:Key="HighlightColumnStyle" TargetType="Border">
-            <Setter Property="Background" Value="{ThemeResource SystemAccentColor}" />
-            <Setter Property="Opacity" Value="0.3" />
-        </Style>
-    </ContentDialog.Resources>
 
     <Grid MinWidth="700" MinHeight="500" RowSpacing="16">
         <Grid.RowDefinitions>
@@ -34,7 +25,7 @@
             <StackPanel Orientation="Horizontal" Spacing="8">
                 <TextBox x:Name="FilePathBox" Width="500" IsReadOnly="True" 
                          PlaceholderText="点击右侧按钮选择文件..." />
-                <Button Click="BrowseButton_Click">
+                <Button x:Name="BrowseButton" Click="BrowseButton_Click">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <FontIcon FontSize="14" Glyph="&#xE8E5;" />
                         <TextBlock Text="浏览" />
@@ -78,14 +69,17 @@
 
             <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
                 <CheckBox x:Name="SkipHeaderCheckBox" Content="第一行是标题"
-                          IsChecked="True" Checked="SkipHeaderCheckBox_Changed" 
+                          IsChecked="True" 
+                          Checked="SkipHeaderCheckBox_Changed" 
                           Unchecked="SkipHeaderCheckBox_Changed" />
             </StackPanel>
         </Grid>
 
         <!-- Excel 预览 -->
-        <Border Grid.Row="2" BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" 
-                BorderThickness="1" CornerRadius="4">
+        <Border Grid.Row="2" 
+                BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}" 
+                BorderThickness="1" 
+                CornerRadius="4">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                 <Grid x:Name="PreviewGrid">
                     <Grid.RowDefinitions>

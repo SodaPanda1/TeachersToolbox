@@ -9,7 +9,6 @@ namespace TeachersToolbox.App;
 
 public partial class App : Application
 {
-    private Window? _window;
     private ServiceProvider? _serviceProvider;
 
     public static MainWindow? MainWindow { get; private set; }

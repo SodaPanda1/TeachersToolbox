@@ -1,4 +1,4 @@
-﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Windows.Storage.Pickers;
@@ -20,24 +20,39 @@ public sealed partial class ImportStudentsDialog : ContentDialog
     {
         this.InitializeComponent();
         ColumnComboBox.SelectedIndex = 1;
+        
+        // 使用 Closing 事件而不是按钮点击事件
+        this.PrimaryButtonClick += OnPrimaryButtonClick;
+        this.SecondaryButtonClick += OnSecondaryButtonClick;
     }
 
     private async void BrowseButton_Click(object sender, RoutedEventArgs e)
     {
-        var picker = new FileOpenPicker();
-        picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-        picker.FileTypeFilter.Add(".xlsx");
-        picker.FileTypeFilter.Add(".xls");
-
-        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(App.MainWindow);
-        WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
-
-        var file = await picker.PickSingleFileAsync();
-        if (file != null)
+        try
         {
-            _selectedFilePath = file.Path;
-            FilePathBox.Text = _selectedFilePath;
-            LoadWorksheets();
+            var picker = new FileOpenPicker();
+            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.FileTypeFilter.Add(".xlsx");
+            picker.FileTypeFilter.Add(".xls");
+
+            var mainWindow = App.MainWindow;
+            if (mainWindow != null)
+            {
+                var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(mainWindow);
+                WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+            }
+
+            var file = await picker.PickSingleFileAsync();
+            if (file != null)
+            {
+                _selectedFilePath = file.Path;
+                FilePathBox.Text = _selectedFilePath;
+                LoadWorksheets();
+            }
+        }
+        catch (Exception ex)
+        {
+            PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
         }
     }
 
@@ -48,14 +63,23 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         {
             var worksheets = _excelService.GetWorksheetNames(_selectedFilePath);
             WorksheetComboBox.ItemsSource = worksheets;
-            if (worksheets.Count > 0) WorksheetComboBox.SelectedIndex = 0;
+            if (worksheets.Count > 0)
+            {
+                WorksheetComboBox.SelectedIndex = 0;
+            }
         }
-        catch (Exception ex) { PreviewInfoText.Text = $"读取文件失败: {ex.Message}"; }
+        catch (Exception ex)
+        {
+            PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
+        }
     }
 
     private void WorksheetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        LoadPreview();
+        if (WorksheetComboBox.SelectedItem != null)
+        {
+            LoadPreview();
+        }
     }
 
     private void ColumnComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,31 +113,42 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             UpdateStudentCount();
             PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
         }
-        catch (Exception ex) { PreviewInfoText.Text = $"加载预览失败: {ex.Message}"; }
+        catch (Exception ex)
+        {
+            PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
+        }
     }
 
     private void RenderPreview()
     {
         if (_previewData == null) return;
+        
         HeaderGrid.Children.Clear();
         HeaderGrid.ColumnDefinitions.Clear();
         DataGrid.Children.Clear();
         DataGrid.RowDefinitions.Clear();
         DataGrid.ColumnDefinitions.Clear();
 
-        for (int col = 0; col < _previewData.Headers.Count; col++)
+        // 设置列定义
+        var columnCount = Math.Min(_previewData.Headers.Count, 10);
+        for (int col = 0; col < columnCount; col++)
         {
             HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
             DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
+
+            // 列头
             var headerCell = CreateCell(_previewData.Headers[col], true, col + 1);
             Grid.SetColumn(headerCell, col);
             HeaderGrid.Children.Add(headerCell);
         }
 
-        for (int row = 0; row < _previewData.Rows.Count; row++)
+        // 设置行定义和数据
+        var rowCount = Math.Min(_previewData.Rows.Count, 20);
+        for (int row = 0; row < rowCount; row++)
         {
             DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            for (int col = 0; col < _previewData.Headers.Count; col++)
+
+            for (int col = 0; col < columnCount; col++)
             {
                 var value = col < _previewData.Rows[row].Count ? _previewData.Rows[row][col] : "";
                 var cell = CreateCell(value, false, col + 1);
@@ -122,6 +157,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
                 DataGrid.Children.Add(cell);
             }
         }
+
         UpdateColumnHighlight();
     }
 
@@ -137,20 +173,23 @@ public sealed partial class ImportStudentsDialog : ContentDialog
                 : new SolidColorBrush(Microsoft.UI.Colors.White),
             Tag = columnIndex
         };
+
         var textBlock = new TextBlock
         {
-            Text = text,
+            Text = text ?? "",
             FontSize = isHeader ? 13 : 12,
             FontWeight = isHeader ? Microsoft.UI.Text.FontWeights.SemiBold : Microsoft.UI.Text.FontWeights.Normal,
             TextTrimming = TextTrimming.CharacterEllipsis,
             MaxLines = 1
         };
+
         border.Child = textBlock;
         return border;
     }
 
     private void UpdateColumnHighlight()
     {
+        // 更新表头高亮
         foreach (var child in HeaderGrid.Children)
         {
             if (child is Border border && border.Tag is int colIndex)
@@ -160,6 +199,8 @@ public sealed partial class ImportStudentsDialog : ContentDialog
                     : new SolidColorBrush(Microsoft.UI.Colors.White);
             }
         }
+
+        // 更新数据行高亮
         foreach (var child in DataGrid.Children)
         {
             if (child is Border border && border.Tag is int colIndex)
@@ -178,26 +219,32 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             StudentCountText.Text = "";
             return;
         }
+
         try
         {
             var worksheetName = WorksheetComboBox.SelectedItem.ToString()!;
             var names = _excelService.ReadStudentNames(_selectedFilePath, worksheetName, _selectedColumnIndex, _skipHeader);
             StudentCountText.Text = $"预计导入 {names.Count} 名学生";
         }
-        catch { StudentCountText.Text = ""; }
+        catch
+        {
+            StudentCountText.Text = "";
+        }
     }
 
-    private void ImportButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
         if (_selectedFilePath == null || WorksheetComboBox.SelectedItem == null)
         {
             args.Cancel = true;
             return;
         }
+
         try
         {
             var worksheetName = WorksheetComboBox.SelectedItem.ToString()!;
             ImportedStudentNames = _excelService.ReadStudentNames(_selectedFilePath, worksheetName, _selectedColumnIndex, _skipHeader);
+
             if (ImportedStudentNames.Count == 0)
             {
                 args.Cancel = true;
@@ -211,7 +258,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
     }
 
-    private void CancelButton_Click(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private void OnSecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
         ImportedStudentNames.Clear();
     }
