@@ -49,16 +49,8 @@ public sealed partial class SettingsPage : Page
             var theme = item.Tag?.ToString() ?? "Default";
             SaveThemeToSettings(theme);
             
-            // 应用主题
-            if (App.MainWindow?.Content is FrameworkElement root)
-            {
-                root.RequestedTheme = theme switch
-                {
-                    "Light" => ElementTheme.Light,
-                    "Dark" => ElementTheme.Dark,
-                    _ => ElementTheme.Default
-                };
-            }
+            // 应用主题 - 使用 MainWindow 的 ApplyTheme 方法
+            App.MainWindow?.ApplyTheme(theme);
         }
     }
 
@@ -260,12 +252,6 @@ public sealed partial class SettingsPage : Page
         };
         await dialog.ShowAsync();
     }
-}
-
-// 应用设置模型
-public class AppSettings
-{
-    public string Theme { get; set; } = "Default";
 }
 
 // 导出数据模型

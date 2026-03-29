@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Windowing;
+using System.Text.Json;
 
 namespace TeachersToolbox.App.Views;
 
@@ -11,6 +12,8 @@ public sealed partial class MainWindow : Window
     private const int DefaultHeight = 800;
     private const int MinWidth = 800;
     private const int MinHeight = 600;
+    private static readonly string SettingsPath = System.IO.Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, "settings.json");
 
     public static int SelectedClassIdForRollCall { get; set; } = -1;
 
@@ -20,8 +23,51 @@ public sealed partial class MainWindow : Window
         this.ExtendsContentIntoTitleBar = true;
         this.Title = "教师工具箱";
 
+        // 加载并应用保存的主题设置
+        LoadAndApplyTheme();
+
         InitializeWindowSize();
         ContentFrame.Navigated += ContentFrame_Navigated;
+    }
+
+    private void LoadAndApplyTheme()
+    {
+        var theme = LoadThemeFromSettings();
+        ApplyTheme(theme);
+    }
+
+    private string LoadThemeFromSettings()
+    {
+        try
+        {
+            if (System.IO.File.Exists(SettingsPath))
+            {
+                var json = System.IO.File.ReadAllText(SettingsPath);
+                var settings = JsonSerializer.Deserialize<AppSettings>(json);
+                return settings?.Theme ?? "Default";
+            }
+        }
+        catch { }
+        return "Default";
+    }
+
+    public void ApplyTheme(string theme)
+    {
+        var elementTheme = theme switch
+        {
+            "Light" => ElementTheme.Light,
+            "Dark" => ElementTheme.Dark,
+            _ => ElementTheme.Default
+        };
+
+        // 设置窗口根元素的主题
+        if (Content is FrameworkElement root)
+        {
+            root.RequestedTheme = elementTheme;
+        }
+
+        // 设置 NavigationView 的主题
+        NavView.RequestedTheme = elementTheme;
     }
 
     private void InitializeWindowSize()
@@ -120,4 +166,9 @@ public sealed partial class MainWindow : Window
             }
         }
     }
+}
+
+public class AppSettings
+{
+    public string Theme { get; set; } = "Default";
 }
