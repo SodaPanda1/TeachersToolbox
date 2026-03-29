@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeachersToolbox.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5dacd577c66c0e777372123a69468af804a5ba55")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fcbecdc25fd30d64b89f7c0f72e38fdf1e05b6fb")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeachersToolbox.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeachersToolbox.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

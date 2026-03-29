@@ -1,14 +1,49 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using TeachersToolbox.Data.Repositories;
 
 namespace TeachersToolbox.App.Views;
 
 public sealed partial class HomePage : Page
 {
+    private readonly ClassRepository _classRepository;
+    private readonly StudentRepository _studentRepository;
+
     public HomePage()
     {
         this.InitializeComponent();
+        _classRepository = App.Services.GetRequiredService<ClassRepository>();
+        _studentRepository = App.Services.GetRequiredService<StudentRepository>();
+        this.Loaded += Page_Loaded;
+    }
+
+    private async void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        await LoadStatisticsAsync();
+    }
+
+    private async Task LoadStatisticsAsync()
+    {
+        try
+        {
+            var classes = await _classRepository.GetAllAsync();
+            var classCount = classes.Count;
+            
+            int studentCount = 0;
+            foreach (var cls in classes)
+            {
+                studentCount += await _studentRepository.GetCountByClassIdAsync(cls.Id);
+            }
+
+            ClassCountText.Text = classCount.ToString();
+            StudentCountText.Text = studentCount.ToString();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"加载统计数据失败: {ex.Message}");
+        }
     }
 
     private void QuickAction_Click(object sender, RoutedEventArgs e)
@@ -25,11 +60,7 @@ public sealed partial class HomePage : Page
         {
             "rollcall" => typeof(RollCallPage),
             "scores" => typeof(ScoresPage),
-            "timer" => typeof(TimerPage),
             "students" => typeof(StudentsPage),
-            "classroom" => typeof(ClassroomPage),
-            "assignments" => typeof(AssignmentsPage),
-            "admin" => typeof(AdminPage),
             _ => null
         };
 

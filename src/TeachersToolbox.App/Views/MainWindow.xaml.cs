@@ -77,14 +77,6 @@ public sealed partial class MainWindow : Window
             SetSelectedNavItem("rollcall");
         else if (e.SourcePageType == typeof(ScoresPage))
             SetSelectedNavItem("scores");
-        else if (e.SourcePageType == typeof(TimerPage))
-            SetSelectedNavItem("timer");
-        else if (e.SourcePageType == typeof(ClassroomPage))
-            SetSelectedNavItem("classroom");
-        else if (e.SourcePageType == typeof(AssignmentsPage))
-            SetSelectedNavItem("assignments");
-        else if (e.SourcePageType == typeof(AdminPage))
-            SetSelectedNavItem("admin");
     }
 
     private void SetSelectedNavItem(string tag)
@@ -138,18 +130,6 @@ public sealed partial class MainWindow : Window
                     break;
                 case "scores":
                     ContentFrame.Navigate(typeof(ScoresPage));
-                    break;
-                case "timer":
-                    ContentFrame.Navigate(typeof(TimerPage));
-                    break;
-                case "classroom":
-                    ContentFrame.Navigate(typeof(ClassroomPage));
-                    break;
-                case "assignments":
-                    ContentFrame.Navigate(typeof(AssignmentsPage));
-                    break;
-                case "admin":
-                    ContentFrame.Navigate(typeof(AdminPage));
                     break;
             }
         }

@@ -17,7 +17,7 @@
                            Text="欢迎使用教师工具箱 - 您的一站式教学助手" />
             </StackPanel>
 
-            <!-- 快捷入口 - 与今日概览相同的布局方式 -->
+            <!-- 快捷入口 -->
             <StackPanel Spacing="12">
                 <TextBlock FontSize="18" FontWeight="SemiBold" Text="快捷入口" />
                 <Grid ColumnSpacing="16">
@@ -25,11 +25,28 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- 学生管理 -->
+                    <Button Grid.Column="0" Click="QuickAction_Click" Tag="students"
+                            HorizontalAlignment="Stretch" Padding="0"
+                            Background="Transparent" BorderThickness="0">
+                        <Border Padding="16" MinHeight="100"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                CornerRadius="8"
+                                PointerEntered="Card_PointerEntered"
+                                PointerExited="Card_PointerExited">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <FontIcon FontSize="28" Glyph="&#xE710;" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="学生管理" HorizontalAlignment="Center" />
+                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
+                                           Text="管理学生档案信息" HorizontalAlignment="Center" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </Button>
+
                     <!-- 随机点名 -->
-                    <Button Grid.Column="0" Click="QuickAction_Click" Tag="rollcall" 
+                    <Button Grid.Column="1" Click="QuickAction_Click" Tag="rollcall" 
                             HorizontalAlignment="Stretch" Padding="0"
                             Background="Transparent" BorderThickness="0">
                         <Border Padding="16" MinHeight="100"
@@ -46,8 +63,8 @@
                         </Border>
                     </Button>
 
-                    <!-- 成绩录入 -->
-                    <Button Grid.Column="1" Click="QuickAction_Click" Tag="scores"
+                    <!-- 成绩管理 -->
+                    <Button Grid.Column="2" Click="QuickAction_Click" Tag="scores"
                             HorizontalAlignment="Stretch" Padding="0"
                             Background="Transparent" BorderThickness="0">
                         <Border Padding="16" MinHeight="100"
@@ -57,45 +74,9 @@
                                 PointerExited="Card_PointerExited">
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <FontIcon FontSize="28" Glyph="&#xE734;" />
-                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="成绩录入" HorizontalAlignment="Center" />
+                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="成绩管理" HorizontalAlignment="Center" />
                                 <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                           Text="快速录入学生成绩" HorizontalAlignment="Center" TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-                    </Button>
-
-                    <!-- 课堂计时 -->
-                    <Button Grid.Column="2" Click="QuickAction_Click" Tag="timer"
-                            HorizontalAlignment="Stretch" Padding="0"
-                            Background="Transparent" BorderThickness="0">
-                        <Border Padding="16" MinHeight="100"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                CornerRadius="8"
-                                PointerEntered="Card_PointerEntered"
-                                PointerExited="Card_PointerExited">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <FontIcon FontSize="28" Glyph="&#xE916;" />
-                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="课堂计时" HorizontalAlignment="Center" />
-                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                           Text="倒计时/正计时工具" HorizontalAlignment="Center" TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-                    </Button>
-
-                    <!-- 学生管理 -->
-                    <Button Grid.Column="3" Click="QuickAction_Click" Tag="students"
-                            HorizontalAlignment="Stretch" Padding="0"
-                            Background="Transparent" BorderThickness="0">
-                        <Border Padding="16" MinHeight="100"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                CornerRadius="8"
-                                PointerEntered="Card_PointerEntered"
-                                PointerExited="Card_PointerExited">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <FontIcon FontSize="28" Glyph="&#xE710;" />
-                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="学生管理" HorizontalAlignment="Center" />
-                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                           Text="管理学生档案信息" HorizontalAlignment="Center" TextWrapping="Wrap" />
+                                           Text="成绩录入与分析" HorizontalAlignment="Center" TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>
                     </Button>
@@ -110,7 +91,6 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <Border Grid.Column="0" Padding="16" 
@@ -119,7 +99,7 @@
                         <StackPanel>
                             <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" 
                                        Text="班级总数" />
-                            <TextBlock FontSize="32" FontWeight="Bold" Text="0" Margin="0,4,0,0" />
+                            <TextBlock x:Name="ClassCountText" FontSize="32" FontWeight="Bold" Text="0" Margin="0,4,0,0" />
                         </StackPanel>
                     </Border>
 
@@ -129,21 +109,11 @@
                         <StackPanel>
                             <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                        Text="学生总数" />
-                            <TextBlock FontSize="32" FontWeight="Bold" Text="0" Margin="0,4,0,0" />
+                            <TextBlock x:Name="StudentCountText" FontSize="32" FontWeight="Bold" Text="0" Margin="0,4,0,0" />
                         </StackPanel>
                     </Border>
 
                     <Border Grid.Column="2" Padding="16"
-                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                            CornerRadius="8">
-                        <StackPanel>
-                            <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                       Text="待批作业" />
-                            <TextBlock FontSize="32" FontWeight="Bold" Text="0" Margin="0,4,0,0" />
-                        </StackPanel>
-                    </Border>
-
-                    <Border Grid.Column="3" Padding="16"
                             Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             CornerRadius="8">
                         <StackPanel>

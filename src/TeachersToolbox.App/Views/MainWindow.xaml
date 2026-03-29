@@ -18,23 +18,9 @@
                         IsPaneOpen="True">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="主页" Icon="Home" Tag="home" />
-                
-                <NavigationViewItemHeader Content="学生管理" />
-                <NavigationViewItem Content="学生档案" Icon="People" Tag="students" />
+                <NavigationViewItem Content="学生管理" Icon="People" Tag="students" />
                 <NavigationViewItem Content="随机点名" Icon="Shuffle" Tag="rollcall" />
-                
-                <NavigationViewItemHeader Content="成绩中心" />
                 <NavigationViewItem Content="成绩管理" Icon="Edit" Tag="scores" />
-                
-                <NavigationViewItemHeader Content="课堂工具" />
-                <NavigationViewItem Content="课堂计时" Icon="Clock" Tag="timer" />
-                <NavigationViewItem Content="课堂工具" Icon="Emoji" Tag="classroom" />
-                
-                <NavigationViewItemHeader Content="作业管理" />
-                <NavigationViewItem Content="作业管理" Icon="Page" Tag="assignments" />
-                
-                <NavigationViewItemHeader Content="行政工具" />
-                <NavigationViewItem Content="行政工具" Icon="Calendar" Tag="admin" />
             </NavigationView.MenuItems>
             <Frame x:Name="ContentFrame" />
         </NavigationView>
