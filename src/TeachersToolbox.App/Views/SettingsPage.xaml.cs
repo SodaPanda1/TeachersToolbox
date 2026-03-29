@@ -12,6 +12,8 @@ public sealed partial class SettingsPage : Page
 {
     private readonly ClassRepository _classRepository;
     private readonly StudentRepository _studentRepository;
+    private static readonly string SettingsPath = System.IO.Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, "settings.json");
 
     public SettingsPage()
     {
@@ -29,7 +31,7 @@ public sealed partial class SettingsPage : Page
 
     private void LoadThemePreference()
     {
-        var theme = Windows.Storage.ApplicationData.Current.LocalSettings.Values["Theme"] as string ?? "Default";
+        var theme = LoadThemeFromSettings();
         for (int i = 0; i < ThemeComboBox.Items.Count; i++)
         {
             if (ThemeComboBox.Items[i] is ComboBoxItem item && item.Tag?.ToString() == theme)
@@ -45,9 +47,9 @@ public sealed partial class SettingsPage : Page
         if (ThemeComboBox.SelectedItem is ComboBoxItem item)
         {
             var theme = item.Tag?.ToString() ?? "Default";
-            Windows.Storage.ApplicationData.Current.LocalSettings.Values["Theme"] = theme;
+            SaveThemeToSettings(theme);
             
-            // 应用主题 - 需要通过 App.MainWindow 访问
+            // 应用主题
             if (App.MainWindow?.Content is FrameworkElement root)
             {
                 root.RequestedTheme = theme switch
@@ -57,6 +59,35 @@ public sealed partial class SettingsPage : Page
                     _ => ElementTheme.Default
                 };
             }
+        }
+    }
+
+    private string LoadThemeFromSettings()
+    {
+        try
+        {
+            if (System.IO.File.Exists(SettingsPath))
+            {
+                var json = System.IO.File.ReadAllText(SettingsPath);
+                var settings = JsonSerializer.Deserialize<AppSettings>(json);
+                return settings?.Theme ?? "Default";
+            }
+        }
+        catch { }
+        return "Default";
+    }
+
+    private void SaveThemeToSettings(string theme)
+    {
+        try
+        {
+            var settings = new AppSettings { Theme = theme };
+            var json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+            System.IO.File.WriteAllText(SettingsPath, json);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"保存设置失败: {ex.Message}");
         }
     }
 
@@ -113,7 +144,7 @@ public sealed partial class SettingsPage : Page
             };
 
             var json = JsonSerializer.Serialize(exportData, new JsonSerializerOptions { WriteIndented = true });
-            await Windows.Storage.FileIO.WriteTextAsync(file, json);
+            System.IO.File.WriteAllText(file.Path, json);
 
             await ShowMessageAsync("导出成功", $"数据已导出到：{file.Path}");
         }
@@ -151,7 +182,7 @@ public sealed partial class SettingsPage : Page
             if (await confirm.ShowAsync() != ContentDialogResult.Primary) return;
 
             // 读取并导入数据
-            var json = await Windows.Storage.FileIO.ReadTextAsync(file);
+            var json = System.IO.File.ReadAllText(file.Path);
             var importData = JsonSerializer.Deserialize<ExportData>(json);
 
             if (importData == null)
@@ -229,6 +260,12 @@ public sealed partial class SettingsPage : Page
         };
         await dialog.ShowAsync();
     }
+}
+
+// 应用设置模型
+public class AppSettings
+{
+    public string Theme { get; set; } = "Default";
 }
 
 // 导出数据模型
