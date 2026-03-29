@@ -58,27 +58,10 @@ public sealed partial class MainWindow : Window
             _ => ElementTheme.Default
         };
 
-        // 设置 NavigationView 的主题
-        NavView.RequestedTheme = elementTheme;
-        
-        // 递归设置 NavigationView 所有子元素的主题
-        SetThemeRecursive(NavView, elementTheme);
-        
-        // 设置 ContentFrame 的主题
-        ContentFrame.RequestedTheme = elementTheme;
-    }
-
-    private void SetThemeRecursive(DependencyObject parent, ElementTheme theme)
-    {
-        var childCount = VisualTreeHelper.GetChildrenCount(parent);
-        for (int i = 0; i < childCount; i++)
+        // 设置 Window 的 Content 主题 - 这会影响整个可视化树
+        if (Content is FrameworkElement rootElement)
         {
-            var child = VisualTreeHelper.GetChild(parent, i);
-            if (child is FrameworkElement element)
-            {
-                element.RequestedTheme = theme;
-            }
-            SetThemeRecursive(child, theme);
+            rootElement.RequestedTheme = elementTheme;
         }
     }
 
