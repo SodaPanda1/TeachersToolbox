@@ -48,12 +48,7 @@
                   ItemClick="StudentListView_ItemClick">
             <ListView.Header>
                 <Grid Padding="8,12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" FontWeight="Medium" Text="座号" />
-                    <TextBlock Grid.Column="1" FontWeight="Medium" Text="姓名" />
+                    <TextBlock FontWeight="Medium" Text="姓名" />
                 </Grid>
             </ListView.Header>
         </ListView>
