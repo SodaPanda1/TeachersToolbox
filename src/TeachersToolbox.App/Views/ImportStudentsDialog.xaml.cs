@@ -27,10 +27,8 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         _classes = classes;
         _studentRepository = App.Services.GetRequiredService<StudentRepository>();
         
-        // 加载班级列表
         LoadClassList();
         
-        // 在 Loaded 事件中设置默认选中项
         this.Loaded += (s, e) =>
         {
             ColumnComboBox.SelectedIndex = 1;
@@ -80,8 +78,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
+            PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
         }
     }
 
@@ -99,8 +96,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
+            PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
         }
     }
 
@@ -120,7 +116,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             if (column != null)
             {
                 _selectedColumnIndex = ExcelImportService.GetColumnIndex(column);
-                UpdateColumnHighlight();
+                UpdatePreviewHighlight();
                 UpdateStudentCount();
             }
         }
@@ -141,102 +137,61 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             _previewData = _excelService.GetPreviewData(_selectedFilePath, worksheetName);
             RenderPreview();
             UpdateStudentCount();
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
+            PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
+            PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
         }
     }
 
     private void RenderPreview()
     {
-        if (_previewData == null) return;
-        
-        HeaderGrid.Children.Clear();
-        HeaderGrid.ColumnDefinitions.Clear();
-        DataGrid.Children.Clear();
-        DataGrid.RowDefinitions.Clear();
-        DataGrid.ColumnDefinitions.Clear();
-
-        var columnCount = Math.Min(_previewData.Headers.Count, 10);
-        for (int col = 0; col < columnCount; col++)
+        if (_previewData == null || _previewData.Rows.Count == 0)
         {
-            HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-            DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-
-            var headerCell = CreateCell(_previewData.Headers[col], true, col + 1);
-            Grid.SetColumn(headerCell, col);
-            HeaderGrid.Children.Add(headerCell);
+            PreviewItemsControl.ItemsSource = null;
+            return;
         }
 
-        var rowCount = Math.Min(_previewData.Rows.Count, 20);
-        for (int row = 0; row < rowCount; row++)
+        var previewRows = new List<PreviewRow>();
+        
+        // 添加表头行
+        var headerRow = new PreviewRow { IsHeader = true, RowIndex = 0 };
+        for (int col = 0; col < _previewData.Headers.Count && col < 10; col++)
         {
-            DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            headerRow.Cells.Add(new PreviewCell 
+            { 
+                Text = _previewData.Headers[col],
+                ColumnIndex = col + 1,
+                IsHighlight = col + 1 == _selectedColumnIndex
+            });
+        }
+        previewRows.Add(headerRow);
 
-            for (int col = 0; col < columnCount; col++)
+        // 添加数据行
+        for (int row = 0; row < _previewData.Rows.Count && row < 20; row++)
+        {
+            var dataRow = new PreviewRow { IsHeader = false, RowIndex = row + 1 };
+            for (int col = 0; col < _previewData.Headers.Count && col < 10; col++)
             {
                 var value = col < _previewData.Rows[row].Count ? _previewData.Rows[row][col] : "";
-                var cell = CreateCell(value, false, col + 1);
-                Grid.SetColumn(cell, col);
-                Grid.SetRow(cell, row);
-                DataGrid.Children.Add(cell);
+                dataRow.Cells.Add(new PreviewCell 
+                { 
+                    Text = value ?? "",
+                    ColumnIndex = col + 1,
+                    IsHighlight = col + 1 == _selectedColumnIndex
+                });
             }
+            previewRows.Add(dataRow);
         }
 
-        UpdateColumnHighlight();
+        PreviewItemsControl.ItemsSource = previewRows;
     }
 
-    private Border CreateCell(string text, bool isHeader, int columnIndex)
+    private void UpdatePreviewHighlight()
     {
-        var border = new Border
-        {
-            BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.LightGray),
-            BorderThickness = new Thickness(0, 0, 1, 1),
-            Padding = new Thickness(8, 4, 8, 4),
-            Background = columnIndex == _selectedColumnIndex
-                ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                : new SolidColorBrush(Microsoft.UI.Colors.White),
-            Tag = columnIndex
-        };
-
-        var textBlock = new TextBlock
-        {
-            Text = text ?? "",
-            FontSize = isHeader ? 13 : 12,
-            FontWeight = isHeader ? Microsoft.UI.Text.FontWeights.SemiBold : Microsoft.UI.Text.FontWeights.Normal,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            MaxLines = 1
-        };
-
-        border.Child = textBlock;
-        return border;
-    }
-
-    private void UpdateColumnHighlight()
-    {
-        foreach (var child in HeaderGrid.Children)
-        {
-            if (child is Border border && border.Tag is int colIndex)
-            {
-                border.Background = colIndex == _selectedColumnIndex
-                    ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                    : new SolidColorBrush(Microsoft.UI.Colors.White);
-            }
-        }
-
-        foreach (var child in DataGrid.Children)
-        {
-            if (child is Border border && border.Tag is int colIndex)
-            {
-                border.Background = colIndex == _selectedColumnIndex
-                    ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                    : new SolidColorBrush(Microsoft.UI.Colors.White);
-            }
-        }
+        if (_previewData == null) return;
+        RenderPreview();
     }
 
     private void UpdateStudentCount()
@@ -263,7 +218,6 @@ public sealed partial class ImportStudentsDialog : ContentDialog
 
     private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        // 验证班级选择
         if (TargetClassComboBox.SelectedItem is not ComboBoxItem classItem)
         {
             args.Cancel = true;
@@ -287,12 +241,10 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             if (ImportedStudentNames.Count == 0)
             {
                 args.Cancel = true;
-                if (PreviewInfoText != null)
-                    PreviewInfoText.Text = "未找到有效的学生姓名";
+                PreviewInfoText.Text = "未找到有效的学生姓名";
                 return;
             }
 
-            // 将学生保存到数据库
             var seatNumber = 1;
             foreach (var name in ImportedStudentNames)
             {
@@ -308,8 +260,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         catch (Exception ex)
         {
             args.Cancel = true;
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"导入失败: {ex.Message}";
+            PreviewInfoText.Text = $"导入失败: {ex.Message}";
         }
     }
 
@@ -317,4 +268,23 @@ public sealed partial class ImportStudentsDialog : ContentDialog
     {
         ImportedStudentNames.Clear();
     }
+}
+
+// 预览数据模型
+public class PreviewRow
+{
+    public bool IsHeader { get; set; }
+    public int RowIndex { get; set; }
+    public List<PreviewCell> Cells { get; set; } = new();
+}
+
+public class PreviewCell
+{
+    public string Text { get; set; } = "";
+    public int ColumnIndex { get; set; }
+    public bool IsHighlight { get; set; }
+    
+    public Brush HighlightBrush => IsHighlight 
+        ? new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(51, 255, 215, 0))  // #33FFD700
+        : new SolidColorBrush(Microsoft.UI.Colors.Transparent);
 }
