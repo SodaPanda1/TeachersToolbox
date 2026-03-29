@@ -97,6 +97,12 @@ public sealed partial class MainWindow : Window
 
     private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
     {
+        if (args.IsSettingsInvoked)
+        {
+            ContentFrame.Navigate(typeof(SettingsPage));
+            return;
+        }
+
         if (args.InvokedItemContainer is NavigationViewItem item)
         {
             var tag = item.Tag?.ToString();

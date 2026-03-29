@@ -10,7 +10,7 @@
     <Grid>
         <NavigationView x:Name="NavView" 
                         IsBackButtonVisible="Auto" 
-                        IsSettingsVisible="False"
+                        IsSettingsVisible="True"
                         ItemInvoked="NavView_ItemInvoked" 
                         BackRequested="NavView_BackRequested"
                         Loaded="NavView_Loaded"
