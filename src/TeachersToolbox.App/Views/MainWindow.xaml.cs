@@ -23,9 +23,6 @@ public sealed partial class MainWindow : Window
         this.ExtendsContentIntoTitleBar = true;
         this.Title = "教师工具箱";
 
-        // 加载并应用保存的主题设置
-        LoadAndApplyTheme();
-
         InitializeWindowSize();
         ContentFrame.Navigated += ContentFrame_Navigated;
     }
@@ -60,12 +57,6 @@ public sealed partial class MainWindow : Window
             _ => ElementTheme.Default
         };
 
-        // 设置窗口根元素的主题
-        if (Content is FrameworkElement root)
-        {
-            root.RequestedTheme = elementTheme;
-        }
-
         // 设置 NavigationView 的主题
         NavView.RequestedTheme = elementTheme;
     }
@@ -99,6 +90,9 @@ public sealed partial class MainWindow : Window
 
     private void NavView_Loaded(object sender, RoutedEventArgs e)
     {
+        // 在 NavView 加载完成后应用主题
+        LoadAndApplyTheme();
+        
         ContentFrame.Navigate(typeof(HomePage));
         NavView.SelectedItem = NavView.MenuItems[0];
         UpdateBackButtonState();
