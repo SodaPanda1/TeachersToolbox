@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using Windows.Storage.Pickers;
 using TeachersToolbox.App.Services;
 using TeachersToolbox.Core.Models;
@@ -18,6 +17,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
     private ExcelPreviewData? _previewData;
     private int _selectedColumnIndex = 2;
     private bool _skipHeader = true;
+    private bool _webViewInitialized = false;
 
     public List<string> ImportedStudentNames { get; private set; } = new();
 
@@ -27,17 +27,32 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         _classes = classes;
         _studentRepository = App.Services.GetRequiredService<StudentRepository>();
         
-        // 加载班级列表
         LoadClassList();
         
-        // 在 Loaded 事件中设置默认选中项
-        this.Loaded += (s, e) =>
+        this.Loaded += async (s, e) =>
         {
             ColumnComboBox.SelectedIndex = 1;
+            await InitializeWebViewAsync();
         };
         
         this.PrimaryButtonClick += OnPrimaryButtonClick;
         this.SecondaryButtonClick += OnSecondaryButtonClick;
+    }
+
+    private async Task InitializeWebViewAsync()
+    {
+        if (_webViewInitialized) return;
+        
+        try
+        {
+            await PreviewWebView.EnsureCoreWebView2Async();
+            _webViewInitialized = true;
+            ShowEmptyPreview();
+        }
+        catch (Exception ex)
+        {
+            PreviewInfoText.Text = $"WebView2 初始化失败: {ex.Message}";
+        }
     }
 
     private void LoadClassList()
@@ -80,8 +95,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
+            PreviewInfoText.Text = $"选择文件失败: {ex.Message}";
         }
     }
 
@@ -99,8 +113,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
+            PreviewInfoText.Text = $"读取文件失败: {ex.Message}";
         }
     }
 
@@ -139,104 +152,146 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         {
             var worksheetName = WorksheetComboBox.SelectedItem.ToString()!;
             _previewData = _excelService.GetPreviewData(_selectedFilePath, worksheetName);
-            RenderPreview();
+            RenderPreviewToWebView();
             UpdateStudentCount();
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
+            PreviewInfoText.Text = $"工作表: {worksheetName} | 共 {_previewData.RowCount} 行, {_previewData.ColumnCount} 列";
         }
         catch (Exception ex)
         {
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
+            PreviewInfoText.Text = $"加载预览失败: {ex.Message}";
         }
     }
 
-    private void RenderPreview()
+    private void ShowEmptyPreview()
     {
-        if (_previewData == null) return;
+        var html = GenerateEmptyHtml();
+        PreviewWebView.NavigateToString(html);
+    }
+
+    private void RenderPreviewToWebView()
+    {
+        if (_previewData == null || !_webViewInitialized) return;
         
-        HeaderGrid.Children.Clear();
-        HeaderGrid.ColumnDefinitions.Clear();
-        DataGrid.Children.Clear();
-        DataGrid.RowDefinitions.Clear();
-        DataGrid.ColumnDefinitions.Clear();
-
-        var columnCount = Math.Min(_previewData.Headers.Count, 10);
-        for (int col = 0; col < columnCount; col++)
-        {
-            HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-            DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
-
-            var headerCell = CreateCell(_previewData.Headers[col], true, col + 1);
-            Grid.SetColumn(headerCell, col);
-            HeaderGrid.Children.Add(headerCell);
-        }
-
-        var rowCount = Math.Min(_previewData.Rows.Count, 20);
-        for (int row = 0; row < rowCount; row++)
-        {
-            DataGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-            for (int col = 0; col < columnCount; col++)
-            {
-                var value = col < _previewData.Rows[row].Count ? _previewData.Rows[row][col] : "";
-                var cell = CreateCell(value, false, col + 1);
-                Grid.SetColumn(cell, col);
-                Grid.SetRow(cell, row);
-                DataGrid.Children.Add(cell);
-            }
-        }
-
-        UpdateColumnHighlight();
-    }
-
-    private Border CreateCell(string text, bool isHeader, int columnIndex)
-    {
-        var border = new Border
-        {
-            BorderBrush = new SolidColorBrush(Microsoft.UI.Colors.LightGray),
-            BorderThickness = new Thickness(0, 0, 1, 1),
-            Padding = new Thickness(8, 4, 8, 4),
-            Background = columnIndex == _selectedColumnIndex
-                ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                : new SolidColorBrush(Microsoft.UI.Colors.White),
-            Tag = columnIndex
-        };
-
-        var textBlock = new TextBlock
-        {
-            Text = text ?? "",
-            FontSize = isHeader ? 13 : 12,
-            FontWeight = isHeader ? Microsoft.UI.Text.FontWeights.SemiBold : Microsoft.UI.Text.FontWeights.Normal,
-            TextTrimming = TextTrimming.CharacterEllipsis,
-            MaxLines = 1
-        };
-
-        border.Child = textBlock;
-        return border;
+        var html = GenerateHtmlTable(_previewData, _selectedColumnIndex);
+        PreviewWebView.NavigateToString(html);
     }
 
     private void UpdateColumnHighlight()
     {
-        foreach (var child in HeaderGrid.Children)
-        {
-            if (child is Border border && border.Tag is int colIndex)
-            {
-                border.Background = colIndex == _selectedColumnIndex
-                    ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                    : new SolidColorBrush(Microsoft.UI.Colors.White);
-            }
-        }
+        if (_previewData == null || !_webViewInitialized) return;
+        RenderPreviewToWebView();
+    }
 
-        foreach (var child in DataGrid.Children)
+    private string GenerateEmptyHtml()
+    {
+        return """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        font-family: 'Segoe UI', Tahoma, sans-serif;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        background: #f5f5f5;
+                        color: #666;
+                    }
+                </style>
+            </head>
+            <body>
+                <div>请选择Excel文件开始预览</div>
+            </body>
+            </html>
+            """;
+    }
+
+    private string GenerateHtmlTable(ExcelPreviewData data, int highlightColumn)
+    {
+        var sb = new System.Text.StringBuilder();
+        
+        sb.AppendLine("""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        font-family: 'Segoe UI', Tahoma, sans-serif;
+                        background: #fff;
+                        padding: 8px;
+                    }
+                    table {
+                        border-collapse: collapse;
+                        width: 100%;
+                        font-size: 12px;
+                    }
+                    th {
+                        background: #f0f0f0;
+                        font-weight: 600;
+                        position: sticky;
+                        top: 0;
+                    }
+                    td, th {
+                        border: 1px solid #ddd;
+                        padding: 6px 8px;
+                        text-align: left;
+                        white-space: nowrap;
+                        min-width: 80px;
+                        max-width: 150px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                    tr:hover { background: #f8f8f8; }
+                    .highlight { background: #fff3cd !important; }
+                    .header-highlight { background: #ffe69c !important; }
+                </style>
+            </head>
+            <body>
+            """);
+        
+        // 添加表头
+        sb.AppendLine("<table><thead><tr>");
+        sb.AppendLine($"<th class='{(highlightColumn == 1 ? "header-highlight" : "")}'>A</th>");
+        
+        for (int col = 1; col < Math.Min(data.Headers.Count, 10); col++)
         {
-            if (child is Border border && border.Tag is int colIndex)
-            {
-                border.Background = colIndex == _selectedColumnIndex
-                    ? new SolidColorBrush(Microsoft.UI.Colors.LightYellow)
-                    : new SolidColorBrush(Microsoft.UI.Colors.White);
-            }
+            var colLetter = ExcelImportService.GetColumnLetter(col + 1);
+            var highlightClass = col + 1 == highlightColumn ? "header-highlight" : "";
+            sb.AppendLine($"<th class='{highlightClass}'>{colLetter}</th>");
         }
+        sb.AppendLine("</tr></thead>");
+        
+        // 添加数据行
+        sb.AppendLine("<tbody>");
+        var rowCount = Math.Min(data.Rows.Count, 25);
+        
+        for (int row = 0; row < rowCount; row++)
+        {
+            sb.AppendLine("<tr>");
+            for (int col = 0; col < Math.Min(data.Headers.Count, 10); col++)
+            {
+                var value = col < data.Rows[row].Count ? (data.Rows[row][col] ?? "") : "";
+                var highlightClass = col + 1 == highlightColumn ? "highlight" : "";
+                sb.AppendLine($"<td class='{highlightClass}'>{System.Net.WebUtility.HtmlEncode(value)}</td>");
+            }
+            sb.AppendLine("</tr>");
+        }
+        sb.AppendLine("</tbody></table>");
+        
+        // 添加底部信息
+        if (data.Rows.Count > 25)
+        {
+            sb.AppendLine($"<div style='padding: 8px; color: #666; font-size: 11px;'>显示前 25 行，共 {data.Rows.Count} 行</div>");
+        }
+        
+        sb.AppendLine("</body></html>");
+        
+        return sb.ToString();
     }
 
     private void UpdateStudentCount()
@@ -263,7 +318,6 @@ public sealed partial class ImportStudentsDialog : ContentDialog
 
     private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        // 验证班级选择
         if (TargetClassComboBox.SelectedItem is not ComboBoxItem classItem)
         {
             args.Cancel = true;
@@ -287,12 +341,10 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             if (ImportedStudentNames.Count == 0)
             {
                 args.Cancel = true;
-                if (PreviewInfoText != null)
-                    PreviewInfoText.Text = "未找到有效的学生姓名";
+                PreviewInfoText.Text = "未找到有效的学生姓名";
                 return;
             }
 
-            // 将学生保存到数据库
             var seatNumber = 1;
             foreach (var name in ImportedStudentNames)
             {
@@ -308,8 +360,7 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         catch (Exception ex)
         {
             args.Cancel = true;
-            if (PreviewInfoText != null)
-                PreviewInfoText.Text = $"导入失败: {ex.Message}";
+            PreviewInfoText.Text = $"导入失败: {ex.Message}";
         }
     }
 
