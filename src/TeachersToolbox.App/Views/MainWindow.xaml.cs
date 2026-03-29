@@ -12,6 +12,9 @@ public sealed partial class MainWindow : Window
     private const int MinWidth = 800;
     private const int MinHeight = 600;
 
+    // 静态属性用于传递选中的班级ID到随机点名页面
+    public static int SelectedClassIdForRollCall { get; set; } = -1;
+
     public MainWindow()
     {
         this.InitializeComponent();
@@ -64,6 +67,36 @@ public sealed partial class MainWindow : Window
     private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
     {
         UpdateBackButtonState();
+        
+        // 更新 NavigationView 选中项
+        if (e.SourcePageType == typeof(HomePage))
+            SetSelectedNavItem("home");
+        else if (e.SourcePageType == typeof(StudentsPage))
+            SetSelectedNavItem("students");
+        else if (e.SourcePageType == typeof(RollCallPage))
+            SetSelectedNavItem("rollcall");
+        else if (e.SourcePageType == typeof(ScoresPage))
+            SetSelectedNavItem("scores");
+        else if (e.SourcePageType == typeof(TimerPage))
+            SetSelectedNavItem("timer");
+        else if (e.SourcePageType == typeof(ClassroomPage))
+            SetSelectedNavItem("classroom");
+        else if (e.SourcePageType == typeof(AssignmentsPage))
+            SetSelectedNavItem("assignments");
+        else if (e.SourcePageType == typeof(AdminPage))
+            SetSelectedNavItem("admin");
+    }
+
+    private void SetSelectedNavItem(string tag)
+    {
+        foreach (var item in NavView.MenuItems)
+        {
+            if (item is NavigationViewItem navItem && navItem.Tag?.ToString() == tag)
+            {
+                NavView.SelectedItem = navItem;
+                return;
+            }
+        }
     }
 
     private void UpdateBackButtonState()

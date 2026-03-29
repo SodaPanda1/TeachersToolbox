@@ -29,6 +29,21 @@ public sealed partial class RollCallPage : Page
     private async void Page_Loaded(object sender, RoutedEventArgs e)
     {
         await LoadClassesAsync();
+        
+        // 检查是否有从学生管理页面传递过来的班级ID
+        var selectedClassId = MainWindow.SelectedClassIdForRollCall;
+        if (selectedClassId != -1)
+        {
+            // 查找并选中对应的班级
+            for (int i = 0; i < ClassComboBox.Items.Count; i++)
+            {
+                if (ClassComboBox.Items[i] is ComboBoxItem item && (int)item.Tag == selectedClassId)
+                {
+                    ClassComboBox.SelectedIndex = i;
+                    break;
+                }
+            }
+        }
     }
 
     private async Task LoadClassesAsync()

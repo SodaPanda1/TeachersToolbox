@@ -34,7 +34,6 @@ public sealed partial class StudentsPage : Page
             _classes = await _classRepository.GetAllAsync();
             ClassComboBox.Items.Clear();
             
-            // 添加"全部"选项
             ClassComboBox.Items.Add(new ComboBoxItem { Content = "全部", Tag = -1 });
             
             foreach (var cls in _classes)
@@ -67,7 +66,6 @@ public sealed partial class StudentsPage : Page
             
             if (classId == -1)
             {
-                // 加载全部学生
                 foreach (var cls in _classes)
                 {
                     var students = await _studentRepository.GetByClassIdAsync(cls.Id);
@@ -83,7 +81,6 @@ public sealed partial class StudentsPage : Page
             }
             else
             {
-                // 加载指定班级的学生
                 var classInfo = _classes.FirstOrDefault(c => c.Id == classId);
                 var students = await _studentRepository.GetByClassIdAsync(classId);
                 foreach (var student in students)
@@ -165,14 +162,11 @@ public sealed partial class StudentsPage : Page
         {
             try
             {
-                // 先删除该班级下的所有学生
                 var students = await _studentRepository.GetByClassIdAsync(classId);
                 foreach (var student in students)
                 {
                     await _studentRepository.DeleteAsync(student.Id);
                 }
-
-                // 再删除班级
                 await _classRepository.DeleteAsync(classId);
                 await LoadClassesAsync();
             }
@@ -199,7 +193,6 @@ public sealed partial class StudentsPage : Page
         
         if (result == ContentDialogResult.Primary && dialog.ImportedStudentNames.Count > 0)
         {
-            // 刷新学生列表
             if (ClassComboBox.SelectedItem is ComboBoxItem item)
             {
                 var classId = (int)item.Tag;
@@ -220,24 +213,26 @@ public sealed partial class StudentsPage : Page
 
     private void RollCallButton_Click(object sender, RoutedEventArgs e)
     {
-        // 获取主窗口并导航到随机点名页面
+        // 获取当前选中的班级ID
+        int selectedClassId = -1;
+        if (ClassComboBox.SelectedItem is ComboBoxItem item)
+        {
+            selectedClassId = (int)item.Tag;
+        }
+
+        // 设置静态属性，传递给随机点名页面
+        MainWindow.SelectedClassIdForRollCall = selectedClassId;
+
+        // 获取主窗口的 ContentFrame 并导航
         var mainWindow = App.MainWindow;
         if (mainWindow != null)
         {
-            // 找到 NavigationView 并导航
-            var navView = mainWindow.Content as Microsoft.UI.Xaml.Controls.NavigationView;
-            if (navView != null)
+            var contentFrameField = mainWindow.GetType().GetField("ContentFrame", 
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            
+            if (contentFrameField?.GetValue(mainWindow) is Frame frame)
             {
-                // 选择随机点名菜单项
-                foreach (var item in navView.MenuItems)
-                {
-                    if (item is Microsoft.UI.Xaml.Controls.NavigationViewItem navItem && 
-                        navItem.Tag?.ToString() == "rollcall")
-                    {
-                        navView.SelectedItem = navItem;
-                        break;
-                    }
-                }
+                frame.Navigate(typeof(RollCallPage));
             }
         }
     }
