@@ -31,6 +31,12 @@ public sealed partial class StudentsPage : Page
     {
         try
         {
+            var selectedClassId = -1;
+            if (ClassComboBox.SelectedItem is ComboBoxItem current)
+            {
+                selectedClassId = (int)current.Tag;
+            }
+
             _classes = await _classRepository.GetAllAsync();
             ClassComboBox.Items.Clear();
             
@@ -41,7 +47,22 @@ public sealed partial class StudentsPage : Page
                 ClassComboBox.Items.Add(new ComboBoxItem { Content = cls.Name, Tag = cls.Id });
             }
             
-            ClassComboBox.SelectedIndex = 0;
+            // 恢复之前选中的班级
+            var found = false;
+            for (int i = 0; i < ClassComboBox.Items.Count; i++)
+            {
+                if (ClassComboBox.Items[i] is ComboBoxItem item && (int)item.Tag == selectedClassId)
+                {
+                    ClassComboBox.SelectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found)
+            {
+                ClassComboBox.SelectedIndex = 0;
+            }
         }
         catch (Exception ex)
         {
@@ -93,6 +114,7 @@ public sealed partial class StudentsPage : Page
                 }
             }
             
+            StudentListView.ItemsSource = null;
             StudentListView.ItemsSource = _students;
         }
         catch (Exception ex)
@@ -193,17 +215,22 @@ public sealed partial class StudentsPage : Page
         
         if (result == ContentDialogResult.Primary && dialog.ImportedStudentNames.Count > 0)
         {
+            var importedCount = dialog.ImportedStudentNames.Count;
+            
+            // 重新加载班级列表（以防导入了新班级）
+            await LoadClassesAsync();
+            
+            // 获取当前选中的班级并刷新学生列表
             if (ClassComboBox.SelectedItem is ComboBoxItem item)
             {
                 var classId = (int)item.Tag;
                 await LoadStudentsAsync(classId);
             }
             
-            var message = $"成功导入 {dialog.ImportedStudentNames.Count} 名学生";
             var resultDialog = new ContentDialog
             {
                 Title = "导入完成",
-                Content = message,
+                Content = $"成功导入 {importedCount} 名学生",
                 CloseButtonText = "确定",
                 XamlRoot = this.XamlRoot
             };
@@ -213,17 +240,14 @@ public sealed partial class StudentsPage : Page
 
     private void RollCallButton_Click(object sender, RoutedEventArgs e)
     {
-        // 获取当前选中的班级ID
         int selectedClassId = -1;
         if (ClassComboBox.SelectedItem is ComboBoxItem item)
         {
             selectedClassId = (int)item.Tag;
         }
 
-        // 设置静态属性，传递给随机点名页面
         MainWindow.SelectedClassIdForRollCall = selectedClassId;
 
-        // 获取主窗口的 ContentFrame 并导航
         var mainWindow = App.MainWindow;
         if (mainWindow != null)
         {
