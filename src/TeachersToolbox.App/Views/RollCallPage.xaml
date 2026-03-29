@@ -22,7 +22,7 @@
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock FontSize="20" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                HorizontalAlignment="Center" Text="当前点名" />
-                    <TextBlock x:Name="StudentNameText" FontSize="72" FontWeight="Bold"
+                    <TextBlock x:Name="StudentNameText" FontSize="54" FontWeight="Bold"
                                HorizontalAlignment="Center" Margin="0,24,0,0" Text="准备好了吗？" />
                     <TextBlock x:Name="ClassInfoText" FontSize="16"
                                Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
