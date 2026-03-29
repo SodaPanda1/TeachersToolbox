@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="TeachersToolbox.App.Views.AddClassDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="添加班级"
+    PrimaryButtonText="确定"
+    SecondaryButtonText="取消"
+    DefaultButton="Primary"
+    mc:Ignorable="d">
+
+    <Grid Width="350" Padding="0,16,0,0">
+        <StackPanel Spacing="12">
+            <TextBlock Text="班级名称" FontWeight="SemiBold" />
+            <TextBox x:Name="ClassNameBox" 
+                     PlaceholderText="请输入班级名称，如：高一(1)班" />
+            <TextBlock Text="提示：请输入完整的班级名称" 
+                       FontSize="12"
+                       Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+        </StackPanel>
+    </Grid>
+</ContentDialog>

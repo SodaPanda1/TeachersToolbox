@@ -1,14 +1,19 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Windows.Storage.Pickers;
 using TeachersToolbox.App.Services;
+using TeachersToolbox.Core.Models;
+using TeachersToolbox.Data.Repositories;
 
 namespace TeachersToolbox.App.Views;
 
 public sealed partial class ImportStudentsDialog : ContentDialog
 {
     private readonly ExcelImportService _excelService = new();
+    private readonly StudentRepository _studentRepository;
+    private readonly List<Class> _classes;
     private string? _selectedFilePath;
     private ExcelPreviewData? _previewData;
     private int _selectedColumnIndex = 2;
@@ -16,23 +21,37 @@ public sealed partial class ImportStudentsDialog : ContentDialog
 
     public List<string> ImportedStudentNames { get; private set; } = new();
 
-    public ImportStudentsDialog()
+    public ImportStudentsDialog(List<Class> classes)
     {
-        this.InitializeComponent();
+        InitializeComponent();
+        _classes = classes;
+        _studentRepository = App.Services.GetRequiredService<StudentRepository>();
         
-        // 在 Loaded 事件中设置默认选中项，避免触发事件时控件未初始化
+        // 加载班级列表
+        LoadClassList();
+        
+        // 在 Loaded 事件中设置默认选中项
         this.Loaded += (s, e) =>
         {
-            var dialogWidth = this.ActualWidth;
-            var dialogHeight = this.ActualHeight;
-            System.Diagnostics.Debug.WriteLine($"Dialog Size: {dialogWidth} x {dialogHeight}");
-
             ColumnComboBox.SelectedIndex = 1;
         };
         
-        // 使用 Closing 事件而不是按钮点击事件
         this.PrimaryButtonClick += OnPrimaryButtonClick;
         this.SecondaryButtonClick += OnSecondaryButtonClick;
+    }
+
+    private void LoadClassList()
+    {
+        TargetClassComboBox.Items.Clear();
+        foreach (var cls in _classes)
+        {
+            TargetClassComboBox.Items.Add(new ComboBoxItem { Content = cls.Name, Tag = cls.Id });
+        }
+        
+        if (TargetClassComboBox.Items.Count > 0)
+        {
+            TargetClassComboBox.SelectedIndex = 0;
+        }
     }
 
     private async void BrowseButton_Click(object sender, RoutedEventArgs e)
@@ -142,20 +161,17 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         DataGrid.RowDefinitions.Clear();
         DataGrid.ColumnDefinitions.Clear();
 
-        // 设置列定义
         var columnCount = Math.Min(_previewData.Headers.Count, 10);
         for (int col = 0; col < columnCount; col++)
         {
             HeaderGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
             DataGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(100) });
 
-            // 列头
             var headerCell = CreateCell(_previewData.Headers[col], true, col + 1);
             Grid.SetColumn(headerCell, col);
             HeaderGrid.Children.Add(headerCell);
         }
 
-        // 设置行定义和数据
         var rowCount = Math.Min(_previewData.Rows.Count, 20);
         for (int row = 0; row < rowCount; row++)
         {
@@ -202,7 +218,6 @@ public sealed partial class ImportStudentsDialog : ContentDialog
 
     private void UpdateColumnHighlight()
     {
-        // 更新表头高亮
         foreach (var child in HeaderGrid.Children)
         {
             if (child is Border border && border.Tag is int colIndex)
@@ -213,7 +228,6 @@ public sealed partial class ImportStudentsDialog : ContentDialog
             }
         }
 
-        // 更新数据行高亮
         foreach (var child in DataGrid.Children)
         {
             if (child is Border border && border.Tag is int colIndex)
@@ -247,8 +261,18 @@ public sealed partial class ImportStudentsDialog : ContentDialog
         }
     }
 
-    private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    private async void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
+        // 验证班级选择
+        if (TargetClassComboBox.SelectedItem is not ComboBoxItem classItem)
+        {
+            args.Cancel = true;
+            PreviewInfoText.Text = "请选择目标班级";
+            return;
+        }
+        
+        var classId = (int)classItem.Tag;
+
         if (_selectedFilePath == null || WorksheetComboBox.SelectedItem == null)
         {
             args.Cancel = true;
@@ -265,6 +289,20 @@ public sealed partial class ImportStudentsDialog : ContentDialog
                 args.Cancel = true;
                 if (PreviewInfoText != null)
                     PreviewInfoText.Text = "未找到有效的学生姓名";
+                return;
+            }
+
+            // 将学生保存到数据库
+            var seatNumber = 1;
+            foreach (var name in ImportedStudentNames)
+            {
+                var student = new Student
+                {
+                    Name = name,
+                    ClassId = classId,
+                    SeatNumber = seatNumber++
+                };
+                await _studentRepository.AddAsync(student);
             }
         }
         catch (Exception ex)
