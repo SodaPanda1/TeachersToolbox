@@ -58,10 +58,20 @@ public sealed partial class MainWindow : Window
             _ => ElementTheme.Default
         };
 
+        // 调试输出
+        System.Diagnostics.Debug.WriteLine($"ApplyTheme called with theme: {theme}, elementTheme: {elementTheme}");
+        System.Diagnostics.Debug.WriteLine($"Content is null: {Content == null}");
+        System.Diagnostics.Debug.WriteLine($"Content type: {Content?.GetType().Name}");
+
         // 设置 Window 的 Content 主题 - 这会影响整个可视化树
         if (Content is FrameworkElement rootElement)
         {
             rootElement.RequestedTheme = elementTheme;
+            System.Diagnostics.Debug.WriteLine($"rootElement.RequestedTheme set to: {rootElement.RequestedTheme}");
+        }
+        else
+        {
+            System.Diagnostics.Debug.WriteLine("Content is not FrameworkElement");
         }
     }
 

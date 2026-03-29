@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Tk/kXK1M74Q=",
+  "dgSpecHash": "kkzE0viTdHI=",
   "success": true,
   "projectFilePath": "D:\\TeachersToolbox\\src\\TeachersToolbox.App\\TeachersToolbox.App.csproj",
   "expectedPackageFiles": [
@@ -38,12 +38,12 @@
     "C:\\Users\\SodaPanda\\.nuget\\packages\\system.numerics.tensors\\9.0.0\\system.numerics.tensors.9.0.0.nupkg.sha512",
     "C:\\Users\\SodaPanda\\.nuget\\packages\\xlparser\\1.5.2\\xlparser.1.5.2.nupkg.sha512",
     "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\10.0.5\\microsoft.netcore.app.runtime.win-x86.10.0.5.nupkg.sha512",
-    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512",
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\10.0.5\\microsoft.netcore.app.runtime.win-x64.10.0.5.nupkg.sha512",
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\10.0.5\\microsoft.windowsdesktop.app.runtime.win-x86.10.0.5.nupkg.sha512",
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\10.0.5\\microsoft.windowsdesktop.app.runtime.win-x64.10.0.5.nupkg.sha512",
     "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\10.0.5\\microsoft.aspnetcore.app.runtime.win-x86.10.0.5.nupkg.sha512",
     "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\10.0.5\\microsoft.aspnetcore.app.runtime.win-x64.10.0.5.nupkg.sha512",
-    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\10.0.5\\microsoft.windowsdesktop.app.runtime.win-x64.10.0.5.nupkg.sha512",
-    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\10.0.5\\microsoft.netcore.app.runtime.win-x64.10.0.5.nupkg.sha512",
-    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\10.0.5\\microsoft.windowsdesktop.app.runtime.win-x86.10.0.5.nupkg.sha512"
+    "C:\\Users\\SodaPanda\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": []
 }
