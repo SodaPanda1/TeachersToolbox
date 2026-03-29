@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Windowing;
 using System.Text.Json;
@@ -59,6 +60,26 @@ public sealed partial class MainWindow : Window
 
         // 设置 NavigationView 的主题
         NavView.RequestedTheme = elementTheme;
+        
+        // 递归设置 NavigationView 所有子元素的主题
+        SetThemeRecursive(NavView, elementTheme);
+        
+        // 设置 ContentFrame 的主题
+        ContentFrame.RequestedTheme = elementTheme;
+    }
+
+    private void SetThemeRecursive(DependencyObject parent, ElementTheme theme)
+    {
+        var childCount = VisualTreeHelper.GetChildrenCount(parent);
+        for (int i = 0; i < childCount; i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is FrameworkElement element)
+            {
+                element.RequestedTheme = theme;
+            }
+            SetThemeRecursive(child, theme);
+        }
     }
 
     private void InitializeWindowSize()
