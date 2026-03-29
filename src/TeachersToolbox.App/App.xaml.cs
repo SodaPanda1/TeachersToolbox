@@ -4,6 +4,7 @@ using TeachersToolbox.App.Views;
 using TeachersToolbox.Data;
 using TeachersToolbox.Data.Repositories;
 using TeachersToolbox.Core.Services;
+using System.Runtime.InteropServices;
 
 namespace TeachersToolbox.App;
 
@@ -13,8 +14,24 @@ public partial class App : Application
 
     public static MainWindow? MainWindow { get; private set; }
 
+    // DPI感知API
+    [DllImport("user32.dll")]
+    private static extern bool SetProcessDpiAwarenessContext(int dpiFlag);
+    
+    private const int DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 = -4;
+
     public App()
     {
+        // 设置DPI感知 - 必须在InitializeComponent之前调用
+        try
+        {
+            SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        }
+        catch
+        {
+            // 如果失败则忽略，使用默认设置
+        }
+        
         this.InitializeComponent();
         ConfigureServices();
     }
