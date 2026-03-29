@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="教师工具箱"
     mc:Ignorable="d">
-    <Grid>
+    <!-- 关键：在Grid上设置背景色，使用ThemeResource确保主题切换生效 -->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <NavigationView x:Name="NavView" 
                         IsBackButtonVisible="Auto" 
                         IsSettingsVisible="True"
@@ -15,13 +16,15 @@
                         BackRequested="NavView_BackRequested"
                         Loaded="NavView_Loaded"
                         PaneDisplayMode="Auto" 
-                        IsPaneOpen="True">
+                        IsPaneOpen="True"
+                        Background="{ThemeResource NavigationViewDefaultPaneBackground}">
             <NavigationView.MenuItems>
                 <NavigationViewItem Content="主页" Icon="Home" Tag="home" />
                 <NavigationViewItem Content="学生管理" Icon="People" Tag="students" />
                 <NavigationViewItem Content="随机点名" Icon="Shuffle" Tag="rollcall" />
             </NavigationView.MenuItems>
-            <Frame x:Name="ContentFrame" />
+            <Frame x:Name="ContentFrame" 
+                   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" />
         </NavigationView>
     </Grid>
 </Window>
