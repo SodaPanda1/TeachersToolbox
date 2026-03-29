@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TeachersToolbox.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0fd50ed7a9549e46aaeadc05a64b31137dcfe67f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+893eee0897f90ba1591686db97a1640e86bbf599")]
 [assembly: System.Reflection.AssemblyProductAttribute("TeachersToolbox.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TeachersToolbox.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

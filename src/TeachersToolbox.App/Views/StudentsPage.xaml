@@ -32,7 +32,6 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
-            <TextBox x:Name="SearchBox" Width="180" Header="搜索" PlaceholderText="输入姓名搜索" />
             <Button x:Name="ImportButton" Click="ImportButton_Click" Margin="0,20,0,0">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon FontSize="14" Glyph="&#xE8E5;" />
