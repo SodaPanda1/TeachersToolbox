@@ -81,6 +81,10 @@
             "Microsoft.WindowsAppSDK": {
               "target": "Package",
               "version": "[1.8.260317003, )"
+            },
+            "System.IO.Packaging": {
+              "target": "Package",
+              "version": "[10.0.5, )"
             }
           },
           "imports": [

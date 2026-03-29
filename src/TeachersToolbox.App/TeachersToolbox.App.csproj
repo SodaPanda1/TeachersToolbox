@@ -44,6 +44,8 @@
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
         <PackageReference Include="ClosedXML" Version="0.102.3" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+        <!-- 修复 System.IO.Packaging 安全漏洞 -->
+        <PackageReference Include="System.IO.Packaging" Version="10.0.5" />
     </ItemGroup>
 
 </Project>
