@@ -22,7 +22,7 @@
                 <ComboBoxItem Content="高一(2)班" Tag="2" />
                 <ComboBoxItem Content="高一(3)班" Tag="3" />
             </ComboBox>
-            <TextBox x:Name="SearchBox" Width="200" Header="搜索" PlaceholderText="输入姓名或学号" />
+            <TextBox x:Name="SearchBox" Width="200" Header="搜索" PlaceholderText="输入姓名搜索" />
             <Button x:Name="ImportButton" Click="ImportButton_Click" Margin="0,20,0,0">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <FontIcon FontSize="14" Glyph="&#xE8E5;" />
@@ -47,21 +47,13 @@
         <ListView Grid.Row="2" x:Name="StudentListView" IsItemClickEnabled="True" 
                   ItemClick="StudentListView_ItemClick">
             <ListView.Header>
-                <Grid Padding="8,12" ColumnSpacing="16" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
+                <Grid Padding="8,12" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="60" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="80" />
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" FontWeight="Medium" Text="座号" />
                     <TextBlock Grid.Column="1" FontWeight="Medium" Text="姓名" />
-                    <TextBlock Grid.Column="2" FontWeight="Medium" Text="学号" />
-                    <TextBlock Grid.Column="3" FontWeight="Medium" Text="性别" />
-                    <TextBlock Grid.Column="4" FontWeight="Medium" Text="联系电话" />
-                    <TextBlock Grid.Column="5" FontWeight="Medium" Text="操作" />
                 </Grid>
             </ListView.Header>
         </ListView>
