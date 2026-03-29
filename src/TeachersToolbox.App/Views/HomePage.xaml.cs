@@ -59,7 +59,6 @@ public sealed partial class HomePage : Page
         var targetPage = tag switch
         {
             "rollcall" => typeof(RollCallPage),
-            "scores" => typeof(ScoresPage),
             "students" => typeof(StudentsPage),
             _ => null
         };

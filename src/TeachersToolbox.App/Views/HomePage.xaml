@@ -24,7 +24,6 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
                     <!-- 学生管理 -->
@@ -59,24 +58,6 @@
                                 <TextBlock Margin="0,8,0,0" FontSize="14" Text="随机点名" HorizontalAlignment="Center" />
                                 <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
                                            Text="课堂随机抽取学生" HorizontalAlignment="Center" TextWrapping="Wrap" />
-                            </StackPanel>
-                        </Border>
-                    </Button>
-
-                    <!-- 成绩管理 -->
-                    <Button Grid.Column="2" Click="QuickAction_Click" Tag="scores"
-                            HorizontalAlignment="Stretch" Padding="0"
-                            Background="Transparent" BorderThickness="0">
-                        <Border Padding="16" MinHeight="100"
-                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                                CornerRadius="8"
-                                PointerEntered="Card_PointerEntered"
-                                PointerExited="Card_PointerExited">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <FontIcon FontSize="28" Glyph="&#xE734;" />
-                                <TextBlock Margin="0,8,0,0" FontSize="14" Text="成绩管理" HorizontalAlignment="Center" />
-                                <TextBlock FontSize="12" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                                           Text="成绩录入与分析" HorizontalAlignment="Center" TextWrapping="Wrap" />
                             </StackPanel>
                         </Border>
                     </Button>
