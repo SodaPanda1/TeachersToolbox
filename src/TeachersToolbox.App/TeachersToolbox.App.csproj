@@ -18,8 +18,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>TeachersToolbox.App</RootNamespace>
         
-        <!-- High DPI Support -->
+        <!-- High DPI Support - 启用PerMonitorV2 DPI感知 -->
         <HighDpiMode>PerMonitorV2</HighDpiMode>
+        <!-- 支持高DPI自动缩放 -->
+        <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+        <!-- 禁用DPI虚拟化 -->
+        <DisableDpiAwareness>false</DisableDpiAwareness>
     </PropertyGroup>
 
     <ItemGroup>
