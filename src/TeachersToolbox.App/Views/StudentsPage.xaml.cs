@@ -132,6 +132,64 @@ public sealed partial class StudentsPage : Page
         }
     }
 
+    private async void DeleteClassButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (ClassComboBox.SelectedItem is not ComboBoxItem item || (int)item.Tag == -1)
+        {
+            var dialog = new ContentDialog
+            {
+                Title = "提示",
+                Content = "请先选择要删除的班级",
+                CloseButtonText = "确定",
+                XamlRoot = this.XamlRoot
+            };
+            await dialog.ShowAsync();
+            return;
+        }
+
+        var classId = (int)item.Tag;
+        var className = item.Content?.ToString();
+
+        var confirmDialog = new ContentDialog
+        {
+            Title = "确认删除",
+            Content = $"确定要删除班级 \"{className}\" 吗？\n该班级下的所有学生数据也将被删除。",
+            PrimaryButtonText = "删除",
+            SecondaryButtonText = "取消",
+            DefaultButton = ContentDialogButton.Secondary,
+            XamlRoot = this.XamlRoot
+        };
+
+        var result = await confirmDialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
+        {
+            try
+            {
+                // 先删除该班级下的所有学生
+                var students = await _studentRepository.GetByClassIdAsync(classId);
+                foreach (var student in students)
+                {
+                    await _studentRepository.DeleteAsync(student.Id);
+                }
+
+                // 再删除班级
+                await _classRepository.DeleteAsync(classId);
+                await LoadClassesAsync();
+            }
+            catch (Exception ex)
+            {
+                var errorDialog = new ContentDialog
+                {
+                    Title = "删除失败",
+                    Content = ex.Message,
+                    CloseButtonText = "确定",
+                    XamlRoot = this.XamlRoot
+                };
+                await errorDialog.ShowAsync();
+            }
+        }
+    }
+
     private async void ImportButton_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new ImportStudentsDialog(_classes);
@@ -162,12 +220,31 @@ public sealed partial class StudentsPage : Page
 
     private void RollCallButton_Click(object sender, RoutedEventArgs e)
     {
-        // 导航到随机点名页面
+        // 获取主窗口并导航到随机点名页面
+        var mainWindow = App.MainWindow;
+        if (mainWindow != null)
+        {
+            // 找到 NavigationView 并导航
+            var navView = mainWindow.Content as Microsoft.UI.Xaml.Controls.NavigationView;
+            if (navView != null)
+            {
+                // 选择随机点名菜单项
+                foreach (var item in navView.MenuItems)
+                {
+                    if (item is Microsoft.UI.Xaml.Controls.NavigationViewItem navItem && 
+                        navItem.Tag?.ToString() == "rollcall")
+                    {
+                        navView.SelectedItem = navItem;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private void StudentListView_ItemClick(object sender, ItemClickEventArgs e)
     {
-        // 查看学生详情
+        // 查看学生详情（暂不实现）
     }
 }
 

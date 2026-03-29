@@ -26,6 +26,10 @@
                             ToolTipService.ToolTip="添加班级">
                         <FontIcon FontSize="14" Glyph="&#xE710;" />
                     </Button>
+                    <Button x:Name="DeleteClassButton" Click="DeleteClassButton_Click"
+                            ToolTipService.ToolTip="删除班级">
+                        <FontIcon FontSize="14" Glyph="&#xE74D;" />
+                    </Button>
                 </StackPanel>
             </StackPanel>
             <TextBox x:Name="SearchBox" Width="180" Header="搜索" PlaceholderText="输入姓名搜索" />
@@ -44,18 +48,20 @@
             </Button>
         </StackPanel>
 
-        <ListView Grid.Row="2" x:Name="StudentListView" IsItemClickEnabled="True" 
-                  ItemClick="StudentListView_ItemClick">
-            <ListView.Header>
-                <Grid Padding="8,12" ColumnSpacing="16" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="120" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" FontWeight="Medium" Text="班级" />
-                    <TextBlock Grid.Column="1" FontWeight="Medium" Text="姓名" />
-                </Grid>
-            </ListView.Header>
+        <ListView Grid.Row="2" x:Name="StudentListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Padding="12,8" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding ClassName}" 
+                                   Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Student.Name}" FontWeight="Medium" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
     </Grid>
 </Page>

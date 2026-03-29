@@ -34,11 +34,7 @@
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" Spacing="16">
             <StackPanel Orientation="Horizontal" Spacing="12">
                 <ComboBox x:Name="ClassComboBox" Width="200" Header="选择班级"
-                          SelectionChanged="ClassComboBox_SelectionChanged">
-                    <ComboBoxItem Content="高一(1)班" Tag="1" />
-                    <ComboBoxItem Content="高一(2)班" Tag="2" />
-                    <ComboBoxItem Content="高一(3)班" Tag="3" />
-                </ComboBox>
+                          SelectionChanged="ClassComboBox_SelectionChanged" />
                 <ToggleSwitch x:Name="RepeatToggle" Header="允许重复"
                               OffContent="不重复点名" OnContent="可重复点名" />
                 <ToggleSwitch x:Name="AnimationToggle" Header="滚动动画"

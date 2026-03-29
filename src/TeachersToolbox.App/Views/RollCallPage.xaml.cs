@@ -1,11 +1,16 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using TeachersToolbox.Core.Models;
+using TeachersToolbox.Data.Repositories;
 
 namespace TeachersToolbox.App.Views;
 
 public sealed partial class RollCallPage : Page
 {
+    private readonly ClassRepository _classRepository;
+    private readonly StudentRepository _studentRepository;
+    private List<Class> _classes = new();
     private List<Student> _students = new();
     private List<int> _calledStudentIds = new();
     private System.Threading.Timer? _rollTimer;
@@ -16,19 +21,91 @@ public sealed partial class RollCallPage : Page
     public RollCallPage()
     {
         this.InitializeComponent();
+        _classRepository = App.Services.GetRequiredService<ClassRepository>();
+        _studentRepository = App.Services.GetRequiredService<StudentRepository>();
+        this.Loaded += Page_Loaded;
     }
 
-    private void ClassComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void Page_Loaded(object sender, RoutedEventArgs e)
     {
-        LoadStudents();
+        await LoadClassesAsync();
     }
 
-    private void LoadStudents()
+    private async Task LoadClassesAsync()
     {
-        // TODO: 从数据库加载学生
-        // 移除示例数据，显示空列表提示
-        _students.Clear();
-        ClassInfoText.Text = "请先在学生管理中导入学生名单";
+        try
+        {
+            _classes = await _classRepository.GetAllAsync();
+            ClassComboBox.Items.Clear();
+            
+            // 添加"全部"选项
+            ClassComboBox.Items.Add(new ComboBoxItem { Content = "全部", Tag = -1 });
+            
+            foreach (var cls in _classes)
+            {
+                ClassComboBox.Items.Add(new ComboBoxItem { Content = cls.Name, Tag = cls.Id });
+            }
+            
+            if (ClassComboBox.Items.Count > 0)
+            {
+                ClassComboBox.SelectedIndex = 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"加载班级失败: {ex.Message}");
+        }
+    }
+
+    private async void ClassComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ClassComboBox.SelectedItem is ComboBoxItem item)
+        {
+            var classId = (int)item.Tag;
+            await LoadStudentsAsync(classId);
+        }
+    }
+
+    private async Task LoadStudentsAsync(int classId)
+    {
+        try
+        {
+            _students.Clear();
+            _calledStudentIds.Clear();
+            
+            if (classId == -1)
+            {
+                // 加载全部学生
+                foreach (var cls in _classes)
+                {
+                    var students = await _studentRepository.GetByClassIdAsync(cls.Id);
+                    _students.AddRange(students);
+                }
+            }
+            else
+            {
+                // 加载指定班级的学生
+                _students = await _studentRepository.GetByClassIdAsync(classId);
+            }
+            
+            if (_students.Count > 0)
+            {
+                ClassInfoText.Text = $"已加载 {_students.Count} 名学生";
+                StudentNameText.Text = "准备好了吗？";
+            }
+            else
+            {
+                ClassInfoText.Text = "该班级暂无学生";
+                StudentNameText.Text = "请先导入学生";
+            }
+            
+            UpdateHistory();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"加载学生失败: {ex.Message}");
+            ClassInfoText.Text = "加载失败";
+        }
     }
 
     private void StartButton_Click(object sender, RoutedEventArgs e)
